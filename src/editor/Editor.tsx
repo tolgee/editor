@@ -2,7 +2,7 @@ import { Compartment, EditorState } from "@codemirror/state";
 import { EditorView, ViewUpdate } from "@codemirror/view";
 import { useEffect, useRef } from "react";
 import { minimalSetup } from "@uiw/react-codemirror";
-import { tolgeeSyntax } from "./tolgeeSyntax";
+import { tolgeeSyntax } from "../parser/tolgeeSyntax";
 
 type Props = {
   initialValue: string;

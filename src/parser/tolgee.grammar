@@ -1,0 +1,18 @@
+@top Program { initial? }
+
+initial { (Text | expression) initial? }
+expression { "{" whitespace* Param whitespace* "}" }
+Param { name }
+Text { text }
+
+@tokens {
+  "{"
+  "}"
+  text { (regular_char+ | escape (regular_char | @eof) | escape escapable escaped_char* (escape | @eof) )+ }
+  whitespace  { @whitespace+ }
+  name { $[a-zA-Z0-9_]+ }
+  escape { "'" }
+  escapable { "{" | "}" | escape }
+  regular_char { ![{}'] }
+  escaped_char { !['] }
+}

@@ -2,5 +2,4 @@
 export const
   Program = 1,
   Text = 2,
-  Expression = 3,
-  Argument = 5
+  Param = 4
