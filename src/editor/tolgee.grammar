@@ -1,0 +1,14 @@
+@top Program { initial? }
+
+initial { (Text | expression) initial? }
+expression { "{" whitespace* Param whitespace* "}" }
+Param { identifier }
+Text { text }
+
+@tokens {
+  "{"
+  "}"
+  text { ![{}]+ }
+  whitespace  { @whitespace+ }
+  identifier { $[a-zA-Z0-9_]+ }
+}
