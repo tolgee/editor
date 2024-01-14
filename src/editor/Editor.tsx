@@ -3,6 +3,7 @@ import { EditorView, ViewUpdate } from "@codemirror/view";
 import { useEffect, useRef } from "react";
 import { minimalSetup } from "@uiw/react-codemirror";
 import { tolgeeSyntax } from "../parser/tolgeeSyntax";
+import { simpleLezerLinter } from "../parser/linter";
 
 type Props = {
   initialValue: string;
@@ -30,8 +31,8 @@ export const Editor: React.FC<Props> = ({ initialValue, onChange }) => {
             }
           }),
           EditorView.contentAttributes.of({ spellcheck: "true", lang: "en" }),
-          // tolgeeLinter,
           languageCompartment.of(tolgeeSyntax()),
+          simpleLezerLinter(),
         ],
       })
     );

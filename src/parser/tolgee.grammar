@@ -12,7 +12,7 @@ Text { text }
   whitespace  { @whitespace+ }
   name { $[a-zA-Z0-9_]+ }
   escape { "'" }
-  escapable { "{" | "}" | escape }
-  regular_char { ![{}'] }
+  escapable { "{" | escape }
+  regular_char { ![{'] }
   escaped_char { !['] }
 }
