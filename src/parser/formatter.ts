@@ -1,6 +1,19 @@
 import { DefaultParamType, TranslateParams } from "@tolgee/core";
 import { parser } from "./tolgeeParser";
-import { Param, Text } from "./tolgeeParser.terms";
+import {
+  ExpressionClose,
+  ExpressionOpen,
+  Param,
+  FormatExpression,
+  PluralExpression,
+  PluralPlaceholder,
+  Text,
+  TextRoot,
+  VariantDescriptor,
+  FormatModifier,
+  FormatFunction,
+} from "./tolgeeParser.terms";
+import { updateNumberFormatOptions } from "./formatModifiers";
 
 const STATE_TEXT = 0,
   STATE_ESCAPE_MAYBE = 1,
@@ -48,23 +61,111 @@ function removeEscape(text: string) {
   return result.join("");
 }
 
+type Context = {
+  type?: typeof FormatExpression | typeof PluralExpression;
+  paramName?: string;
+  variants?: Record<string, string>;
+  activeVariant?: string;
+  result: string;
+  numberFormatOptions?: Intl.NumberFormatOptions;
+  formatType?: "number";
+};
+
 export function formatter(
+  locale: string,
   translation: string,
   params?: TranslateParams<DefaultParamType>
 ) {
   const tree = parser.configure({ strict: true }).parse(translation);
   const cursor = tree.cursor();
-  const result = [];
+  const contextStack: Context[] = [{ result: "" }];
+
+  function pushText(text: string) {
+    const context = contextStack[contextStack.length - 1];
+    if (context.activeVariant) {
+      context.variants![context.activeVariant] += text;
+    } else {
+      context.result += text;
+    }
+  }
+
   do {
     const text = translation.substring(cursor.from, cursor.to);
-    if (cursor.type.id === Text) {
-      result.push(removeEscape(text));
-    } else if (cursor.type.id === Param) {
-      if (!params?.[text]) {
-        throw Error(`Missing parameter '${text}'`);
+    const context = contextStack[contextStack.length - 1];
+
+    switch (cursor.type.id) {
+      case TextRoot:
+      case Text:
+        if (context.activeVariant) {
+          pushText(removeEscape(text));
+        } else {
+          pushText(removeEscape(text));
+        }
+        break;
+      case ExpressionOpen:
+        contextStack.push({ result: "" });
+        break;
+      case FormatExpression:
+      case PluralExpression:
+        context.type = cursor.type.id;
+        break;
+      case Param:
+        context.paramName = text;
+        break;
+      case VariantDescriptor: {
+        context.activeVariant = text;
+        context.variants = { ...context.variants, [text]: "" };
+        break;
       }
-      result.push(params[text]);
+      case FormatFunction:
+        context.formatType = text as any;
+        context.numberFormatOptions = {};
+        break;
+
+      case FormatModifier:
+        if (context.formatType === "number") {
+          updateNumberFormatOptions(context.numberFormatOptions!, text);
+        }
+        break;
+
+      case PluralPlaceholder:
+        pushText(Number(params?.[context.paramName!]).toLocaleString(locale));
+        break;
+      case ExpressionClose: {
+        if (!params?.[context.paramName!]) {
+          throw Error(`Missing parameter '${context.paramName}'`);
+        }
+        if (context.type === FormatExpression) {
+          if (context.formatType === "number") {
+            pushText(
+              Number(params[context.paramName!]).toLocaleString(
+                locale,
+                context.numberFormatOptions
+              )
+            );
+          } else {
+            pushText(String(params?.[context.paramName!]));
+          }
+        } else if (context.type === PluralExpression) {
+          const value = Number(params[context.paramName!]);
+          if (Number.isNaN(value)) {
+            throw Error(`Parameter '${context.paramName}' is not a number`);
+          }
+          if (context.variants!["other"] === undefined) {
+            throw Error(`Missing 'other' variant`);
+          }
+          const expectedVariant = new Intl.PluralRules(locale).select(value);
+          if (context.variants![expectedVariant]) {
+            context.result = context.variants![expectedVariant];
+          } else {
+            context.result = context.variants!["other"];
+          }
+        }
+        const text = contextStack.pop()!.result;
+        pushText(text);
+        break;
+      }
     }
   } while (cursor.next());
-  return result.join("");
+  return contextStack[0].result;
 }

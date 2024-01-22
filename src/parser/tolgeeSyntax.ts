@@ -11,7 +11,9 @@ export const lezerLanguage = LRLanguage.define({
     props: [
       styleTags({
         Param: t.variableName,
+        TextRoot: t.string,
         Text: t.string,
+        VariantDescriptor: t.variableName,
         "{ }": t.paren,
       }),
     ],

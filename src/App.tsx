@@ -2,7 +2,9 @@ import { useState } from "react";
 import { Editor } from "./editor/Editor";
 
 function App() {
-  const [value, setValue] = useState("a{b}c");
+  const [value, setValue] = useState(
+    `Auto translated {TranslationCount, plural, one {# translation} other {# translations}}`
+  );
 
   return (
     <div>

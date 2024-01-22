@@ -1,9 +1,10 @@
 import { TranslateParams } from "@tolgee/core";
 import { formatter } from "./formatter";
 import IntlMessageFormat from "intl-messageformat";
+import { locales } from "./locales";
 
-function icu(text: string, params?: TranslateParams) {
-  return new IntlMessageFormat(text, "en", undefined, {
+function icu(locale: string, text: string, params?: TranslateParams) {
+  return new IntlMessageFormat(text, locale, undefined, {
     ignoreTag: true,
   }).format(params);
 }
@@ -14,13 +15,17 @@ function getText() {
 
 function matchIcu(params?: TranslateParams) {
   const text = getText();
-  expect(formatter(text, params)).toEqual(icu(text, params));
+  locales.forEach((locale) => {
+    const icuResult = icu(locale, text, params);
+    const myResult = formatter(locale, text, params);
+    expect(myResult).toEqual(icuResult);
+  });
 }
 
 function expectToThrowWithIcu(params?: TranslateParams) {
   const text = getText();
-  expect(() => icu(text, params)).toThrow();
-  expect(() => formatter(text, params)).toThrow();
+  expect(() => icu("en", text, params)).toThrow();
+  expect(() => formatter("en", text, params)).toThrow();
 }
 
 describe("simple formatter", () => {
@@ -102,5 +107,30 @@ describe("simple formatter", () => {
 
   test("this is obviously bad { yo, }", () => {
     expectToThrowWithIcu();
+  });
+
+  test(`test {', number, ::percent} in param name`, () => {
+    expectToThrowWithIcu({ "'": 0.1 });
+  });
+
+  // plurals
+  test(`I have {num, plural, one {# one} two {# two} few {# few} many {# many} other {# other} } tests`, () => {
+    matchIcu({ num: 1 });
+    matchIcu({ num: 2 });
+    matchIcu({ num: 4 });
+    matchIcu({ num: 5 });
+    matchIcu({ num: 10 });
+  });
+
+  test(`I have {num, plural, one {# one} two {# two} other {# other} few {# few} many {# many} } tests`, () => {
+    matchIcu({ num: 1 });
+  });
+
+  test(`Almost {pctBlack, number, ::percent} of them are black.`, () => {
+    matchIcu({ pctBlack: 0.1 });
+  });
+
+  test(`الاقتص– تضر البيئة – الاستخراج {لاقتصاد, number, ::percent} الموارد الطبيعية –`, () => {
+    matchIcu({ لاقتصاد: 0.1 });
   });
 });
