@@ -5,13 +5,14 @@ import {
   ExpressionOpen,
   Param,
   FormatExpression,
-  PluralExpression,
   PluralPlaceholder,
   Text,
   TextRoot,
   VariantDescriptor,
   FormatStyle,
   FormatFunction,
+  SelectExpression,
+  SelectVariant,
 } from "./tolgeeParser.terms";
 import { updateNumberFormatOptions } from "./formatModifiers";
 
@@ -62,13 +63,14 @@ function removeEscape(text: string) {
 }
 
 type Context = {
-  type?: typeof FormatExpression | typeof PluralExpression;
+  type?: typeof FormatExpression | typeof SelectExpression;
   paramName?: string;
   variants?: Record<string, string>;
   activeVariant?: string;
   result: string;
   numberFormatOptions?: Intl.NumberFormatOptions;
-  formatType?: "number";
+  formatType?: "number" | "date" | "time";
+  selectType?: "plural" | "selectordinal" | "select";
 };
 
 export function formatter(
@@ -106,7 +108,7 @@ export function formatter(
         contextStack.push({ result: "" });
         break;
       case FormatExpression:
-      case PluralExpression:
+      case SelectExpression:
         context.type = cursor.type.id;
         break;
       case Param:
@@ -115,6 +117,10 @@ export function formatter(
       case VariantDescriptor: {
         context.activeVariant = text;
         context.variants = { ...context.variants, [text]: "" };
+        break;
+      }
+      case SelectVariant: {
+        context.selectType = text as any;
         break;
       }
       case FormatFunction:
@@ -148,7 +154,7 @@ export function formatter(
           } else {
             pushText(String(params?.[context.paramName!]));
           }
-        } else if (context.type === PluralExpression) {
+        } else if (context.type === SelectExpression) {
           const value = Number(params[context.paramName!]);
           if (Number.isNaN(value)) {
             throw Error(`Parameter '${context.paramName}' is not a number`);
