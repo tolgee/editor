@@ -5,8 +5,8 @@ nested_content { (Text | expression | PluralPlaceholder) nested_content? }
 
 expression { ExpressionOpen (FormatExpression | PluralExpression) ExpressionClose }
 
-FormatExpression { space? Param space? ("," space? FormatFunction space? ("," space? format_detailed)?)? }
-PluralExpression { space? Param space? "," space? "plural" space? "," (space? PluralVariant )+ space? }
+FormatExpression { space? Param space? ("," space? FormatFunction space? ("," FormatStyle)?)? }
+PluralExpression { space? Param space? "," space? "plural" space? "," (space? PluralVariant)+ space? }
 PluralVariant { VariantDescriptor space? "{" nested_content "}" }
 
 Param { name }
@@ -17,8 +17,7 @@ ExpressionOpen { "{" }
 ExpressionClose { "}" }
 PluralPlaceholder { plural_placeholder }
 FormatFunction { format_function }
-format_detailed { format_start (FormatModifier space?)+ }
-FormatModifier { name }
+FormatStyle { format_style }
 
 @tokens {
   "plural"
@@ -39,5 +38,5 @@ FormatModifier { name }
   variant_descriptor { 'zero' | 'one' | 'two' | 'few' | 'many' | 'other' }
   space  { @whitespace+ }
   format_function { 'number' }
-  format_start { '::' }
+  format_style { ![}]+ }
 }

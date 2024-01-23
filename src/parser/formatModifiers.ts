@@ -1,8 +1,11 @@
 export function updateNumberFormatOptions(
   currentOptions: Intl.NumberFormatOptions,
-  newModifier: string
+  style: string
 ) {
-  if (newModifier === "percent") {
-    currentOptions.style = "percent";
+  const options = style.split(/\s+/);
+  for (const modifier of options) {
+    if (modifier === "percent") {
+      currentOptions.style = "percent";
+    }
   }
 }

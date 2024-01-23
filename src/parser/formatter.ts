@@ -10,7 +10,7 @@ import {
   Text,
   TextRoot,
   VariantDescriptor,
-  FormatModifier,
+  FormatStyle,
   FormatFunction,
 } from "./tolgeeParser.terms";
 import { updateNumberFormatOptions } from "./formatModifiers";
@@ -122,11 +122,13 @@ export function formatter(
         context.numberFormatOptions = {};
         break;
 
-      case FormatModifier:
+      case FormatStyle: {
+        const style = text.trim();
         if (context.formatType === "number") {
-          updateNumberFormatOptions(context.numberFormatOptions!, text);
+          updateNumberFormatOptions(context.numberFormatOptions!, style);
         }
         break;
+      }
 
       case PluralPlaceholder:
         pushText(Number(params?.[context.paramName!]).toLocaleString(locale));

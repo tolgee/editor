@@ -6,7 +6,7 @@ export const
   FormatExpression = 5,
   Param = 6,
   FormatFunction = 7,
-  FormatModifier = 8,
+  FormatStyle = 8,
   PluralExpression = 9,
   PluralVariant = 11,
   VariantDescriptor = 12,

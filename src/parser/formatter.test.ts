@@ -126,11 +126,11 @@ describe("simple formatter", () => {
     matchIcu({ num: 1 });
   });
 
-  test(`Almost {pctBlack, number, ::percent} of them are black.`, () => {
+  test(`Almost {pctBlack, number, percent} of them are black.`, () => {
     matchIcu({ pctBlack: 0.1 });
   });
 
-  test(`الاقتص– تضر البيئة – الاستخراج {لاقتصاد, number, ::percent} الموارد الطبيعية –`, () => {
+  test(`الاقتص– تضر البيئة – الاستخراج {لاقتصاد, number, percent} الموارد الطبيعية –`, () => {
     matchIcu({ لاقتصاد: 0.1 });
   });
 });
