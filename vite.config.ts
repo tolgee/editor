@@ -23,9 +23,11 @@ export default defineConfig({
           exec("npm run --silent grammar", (_, stdout, stderr) => {
             if (stdout) {
               process.stdout.write(stdout);
+              process.stdout.write("\n");
             }
             if (stderr) {
               process.stderr.write(stderr);
+              process.stderr.write("\n");
             }
           });
         }

@@ -12,4 +12,7 @@ export const
   VariantDescriptor = 12,
   Text = 13,
   PluralPlaceholder = 14,
-  ExpressionClose = 16
+  HtmlTag = 15,
+  TagNameOpen = 17,
+  TagNameClose = 20,
+  ExpressionClose = 22

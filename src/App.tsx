@@ -3,7 +3,7 @@ import { Editor } from "./editor/Editor";
 
 function App() {
   const [value, setValue] = useState(
-    `Auto translated {TranslationCount, plural, one {# translation} other {# translations}}`
+    `Auto translated {TranslationCount, plural, one {# translation} other {# translations}} <hi></hi>`
   );
 
   return (

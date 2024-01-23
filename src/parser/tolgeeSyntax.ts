@@ -15,6 +15,7 @@ export const lezerLanguage = LRLanguage.define({
         Text: t.string,
         VariantDescriptor: t.variableName,
         "{ }": t.paren,
+        HtmlTag: t.variableName,
       }),
     ],
   }),
