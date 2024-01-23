@@ -1,17 +1,16 @@
 @top Program { initial_content? }
 
-initial_content { (TextRoot | expression | HtmlTag) initial_content? }
-nested_content { (Text | expression | PluralPlaceholder | HtmlTag ) nested_content? }
+initial_content { (TextRoot | Expression | HtmlTag) initial_content? }
+nested_content { (Text | Expression | PluralPlaceholder | HtmlTag ) nested_content? }
 
-expression { ExpressionOpen (FormatExpression | SelectExpression) ExpressionClose }
+Expression { ExpressionOpen (FormatExpression | SelectExpression) ExpressionClose }
 
-HtmlTag {
-  ("<" TagNameOpen space? ">") |
-  ("<" "/" TagNameClose space? ">")
-}
+HtmlTag { HtmlTagOpen | HtmlTagClose }
+HtmlTagOpen { "<" TagName space? ">" }
+HtmlTagClose { "<" "/" TagName space? ">" }
 
 FormatExpression { space? Param space? ("," space? FormatFunction space? ("," FormatStyle)?)? }
-SelectExpression { space? Param space? "," space? SelectFunction space? "," (space? Offset ",")? (space? SelectVariant)+ space? }
+SelectExpression { space? Param space? "," space? SelectFunction space? "," (space? Offset)? (space? SelectVariant)+ space? }
 SelectVariant { VariantDescriptor space? "{" nested_content "}" }
 
 Offset { offset_definition }
@@ -25,8 +24,7 @@ ExpressionClose { "}" }
 PluralPlaceholder { plural_placeholder }
 FormatFunction { format_function }
 FormatStyle { format_style }
-TagNameOpen { tag_name }
-TagNameClose { tag_name }
+TagName { tag_name }
 
 @tokens {
   "{"
@@ -34,7 +32,7 @@ TagNameClose { tag_name }
   "<"
   ">"
   "/"
-  offset_definition { "offset:" $[0-9]+ }
+  offset_definition { "offset:" $[+-]? $[0-9]+ }
   plural_placeholder { '#' }
   // non-White_Space and non-PatternSyntax
   // https://www.unicode.org/Public/UCD/latest/ucd/PropList.txt

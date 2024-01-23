@@ -3,7 +3,26 @@ import { EditorView, ViewUpdate } from "@codemirror/view";
 import { useEffect, useRef } from "react";
 import { minimalSetup } from "@uiw/react-codemirror";
 import { tolgeeSyntax } from "../parser/tolgeeSyntax";
-import { simpleLezerLinter } from "../parser/linter";
+import { tolgeeLinter } from "./tolgeeLinter";
+import { placeholders } from "./PlaceholderWidget";
+import styled from "@emotion/styled";
+
+const StyledEditor = styled("div")`
+  & .placeholder-widget {
+    border: 1px solid black;
+    border-radius: 10px;
+    padding: 2px 6px;
+    font-size: 12px;
+  }
+
+  & .placeholder-tagOpen {
+    border-radius: 10px 0px 0px 10px;
+  }
+
+  & .placeholder-tagClose {
+    border-radius: 0px 10px 10px 0px;
+  }
+`;
 
 type Props = {
   initialValue: string;
@@ -32,14 +51,14 @@ export const Editor: React.FC<Props> = ({ initialValue, onChange }) => {
           }),
           EditorView.contentAttributes.of({ spellcheck: "true", lang: "en" }),
           languageCompartment.of(tolgeeSyntax()),
-          simpleLezerLinter(),
+          tolgeeLinter,
+          placeholders,
         ],
       })
     );
-
     editor.current = instance;
     return () => instance.destroy();
   }, []);
 
-  return <div ref={ref} />;
+  return <StyledEditor ref={ref} />;
 };

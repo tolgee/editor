@@ -1,23 +1,23 @@
 import { Diagnostic, linter } from "@codemirror/lint";
-import { formatParser } from "../FormatSimple/formatParser";
-import { FormatError } from "../FormatSimple/FormatError";
+import { parse } from "@formatjs/icu-messageformat-parser";
 
 export const tolgeeLinter = linter((view) => {
-  let error: FormatError | undefined = undefined;
+  let error: any | undefined = undefined;
 
   try {
-    formatParser(view.state.doc.toString());
+    parse(view.state.doc.toString(), {
+      captureLocation: true,
+      ignoreTag: true,
+    });
   } catch (e) {
-    if (e instanceof FormatError) {
-      error = e;
-    }
+    error = e;
   }
 
   const diagnostics: Diagnostic[] = [];
   if (error) {
     diagnostics.push({
-      from: error.index,
-      to: error.index + 1,
+      from: error.location.start.offset,
+      to: error.location.end.offset,
       severity: "error",
       message: error.message,
     });

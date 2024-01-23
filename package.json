@@ -24,6 +24,7 @@
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
+    "@formatjs/icu-messageformat-parser": "^2.7.5",
     "@lezer/generator": "^1.6.0",
     "@tolgee/core": "^5.19.0",
     "@types/jest": "^29.5.11",
