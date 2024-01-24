@@ -1,6 +1,6 @@
 @top Program { initial_content? }
 
-initial_content { (TextRoot | Expression | HtmlTag) initial_content? }
+initial_content { (TextRoot | Expression | PluralPlaceholder | HtmlTag) initial_content? }
 nested_content { (Text | Expression | PluralPlaceholder | HtmlTag ) nested_content? }
 
 Expression { ExpressionOpen (FormatExpression | SelectExpression) ExpressionClose }
@@ -50,7 +50,7 @@ TagName { tag_name }
   )+ }
   escapable_root { "{" | "<" | escape | plural_placeholder }
   escapable { "{" | "}" | "<" | escape | plural_placeholder }
-  regular_char_root { ![{<'] }
+  regular_char_root { ![{<'#] }
   regular_char { ![{}<'#]}
   escaped_char { !['] }
   select_function { 'plural' | 'selectordinal' | 'select' }

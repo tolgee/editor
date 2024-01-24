@@ -4,43 +4,58 @@ import { useEffect, useRef } from "react";
 import { minimalSetup } from "@uiw/react-codemirror";
 import { tolgeeSyntax } from "../parser/tolgeeSyntax";
 import { tolgeeLinter } from "./tolgeeLinter";
-import { placeholders } from "./PlaceholderWidget";
+import { placeholderPlugin } from "./PlaceholderPlugin";
 import styled from "@emotion/styled";
+import { tooltipPlugin } from "./TooltipPlugin";
 
 const StyledEditor = styled("div")`
+  font-size: 14px;
+
   & .placeholder-widget {
-    border: 1px solid black;
+    border: 1px solid #2e2e2e4e;
     border-radius: 10px;
-    padding: 2px 6px;
+    padding: 1px 4px;
     font-size: 12px;
+    user-select: none;
   }
 
   & .placeholder-tagOpen {
     border-radius: 10px 0px 0px 10px;
+    padding-right: 2px;
   }
 
   & .placeholder-tagClose {
     border-radius: 0px 10px 10px 0px;
+    padding-left: 2px;
+  }
+
+  & .placeholder-error {
+    background: #ff000054;
   }
 `;
 
 type Props = {
   initialValue: string;
   onChange?: (val: string) => void;
+  placeholders?: boolean;
 };
 
-export const Editor: React.FC<Props> = ({ initialValue, onChange }) => {
+export const Editor: React.FC<Props> = ({
+  initialValue,
+  onChange,
+  placeholders,
+}) => {
   const ref = useRef<HTMLDivElement>(null);
   const editor = useRef<EditorView>();
+  const compartment = useRef<Compartment>();
 
   useEffect(() => {
+    const languageCompartment = new Compartment();
+    compartment.current = new Compartment();
+
     const instance = new EditorView({
       parent: ref.current!,
-    });
-    const languageCompartment = new Compartment();
-
-    instance.setState(
-      EditorState.create({
+      state: EditorState.create({
         doc: initialValue,
         extensions: [
           minimalSetup(),
@@ -52,13 +67,21 @@ export const Editor: React.FC<Props> = ({ initialValue, onChange }) => {
           EditorView.contentAttributes.of({ spellcheck: "true", lang: "en" }),
           languageCompartment.of(tolgeeSyntax()),
           tolgeeLinter,
-          placeholders,
+          compartment.current.of([]),
         ],
-      })
-    );
+      }),
+    });
+
     editor.current = instance;
     return () => instance.destroy();
   }, []);
+
+  useEffect(() => {
+    const plugins = placeholders ? [placeholderPlugin, tooltipPlugin] : [];
+    editor.current?.dispatch({
+      effects: compartment.current?.reconfigure(plugins),
+    });
+  }, [placeholders]);
 
   return <StyledEditor ref={ref} />;
 };

@@ -19,6 +19,7 @@ export type Placeholder = {
   type: "variable" | "tagOpen" | "tagClose" | "hash";
   position: Position;
   name?: string;
+  error?: "missing_open_tag" | "missing_close_tag";
 };
 
 export const getPlaceholders = (input: string) => {
@@ -30,12 +31,32 @@ export const getPlaceholders = (input: string) => {
 
   const result: Placeholder[] = [];
 
+  const openTags = new Map<string, Placeholder[]>();
+
   function pushCurrent() {
-    result.push({
+    const placeholder: Placeholder = {
       name: current!.name,
       type: current!.type!,
       position: current!.position!,
-    });
+    };
+
+    if (placeholder.type === "tagOpen") {
+      const values = openTags.get(placeholder.name!) ?? [];
+      values.push(placeholder);
+      openTags.set(placeholder.name!, values);
+    } else if (placeholder.type === "tagClose") {
+      const values = openTags.get(placeholder.name!);
+      if (!values) {
+        placeholder.error = "missing_open_tag";
+      } else {
+        values.pop();
+        if (values.length === 0) {
+          openTags.delete(placeholder.name!);
+        }
+      }
+    }
+
+    result.push(placeholder);
     cursor = current!.rootNode.lastChild!.cursor();
     current = undefined;
   }
@@ -94,5 +115,12 @@ export const getPlaceholders = (input: string) => {
         break;
     }
   } while (cursor.next());
+
+  openTags.forEach((values) =>
+    values.forEach((placeholder) => {
+      placeholder.error = "missing_close_tag";
+    })
+  );
+
   return result;
 };

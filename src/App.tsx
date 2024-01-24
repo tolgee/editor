@@ -6,6 +6,7 @@ function App() {
   const [value, setValue] = useState(
     `This {variable} and this is <hi>tag</hi>`
   );
+  const [placeholders, setPlaceholders] = useState(true);
 
   const tokens = useMemo(() => {
     try {
@@ -17,7 +18,19 @@ function App() {
 
   return (
     <div>
-      <Editor initialValue={value} onChange={setValue} />
+      <Editor
+        initialValue={value}
+        onChange={setValue}
+        placeholders={placeholders}
+      />
+      <label>
+        <input
+          type="checkbox"
+          checked={placeholders}
+          onChange={() => setPlaceholders((placeholders) => !placeholders)}
+        />
+        Placeholders
+      </label>
       <pre>{tokens}</pre>
     </div>
   );
