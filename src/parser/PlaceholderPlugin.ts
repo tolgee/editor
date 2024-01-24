@@ -7,7 +7,12 @@ import {
   WidgetType,
 } from "@codemirror/view";
 import { Placeholder, getPlaceholders } from "./getPlaceholders";
-import { ChangeSet, RangeSetBuilder } from "@codemirror/state";
+import {
+  ChangeSet,
+  RangeSetBuilder,
+  StateField,
+  Transaction,
+} from "@codemirror/state";
 
 class PlaceholderWidget extends WidgetType {
   value: Placeholder;
@@ -90,110 +95,110 @@ function addOnlyAllowed(
   });
 }
 
+function shiftPlaceholders(
+  placeholders: Placeholder[],
+  fromA: number,
+  toA: number,
+  fromB: number,
+  toB: number
+) {
+  const sectionA = toA - fromA;
+  const sectionB = toB - fromB;
+  const addedChars = sectionB - sectionA;
+
+  return placeholders.filter((value) => {
+    if (fromA < value.position.end && toA > value.position.start) {
+      return false;
+    }
+
+    if (toA < value.position.start) {
+      value.position.start += addedChars;
+      value.position.end += addedChars;
+    }
+    return true;
+  });
+}
+
+function shiftByChanges(placeholders: Placeholder[], changes: ChangeSet) {
+  let result = placeholders;
+  changes.iterChanges((fromA, toA, fromB, toB) => {
+    result = shiftPlaceholders(result, fromA, toA, fromB, toB);
+  });
+  return result;
+}
+
 export type Options = {
   noUpdates?: boolean;
   allowedNewPlaceholders?: Partial<Placeholder>[];
 };
 
-export const PlaceholderPlugin = (options?: Options) => {
-  const { noUpdates } = options || {};
-  return ViewPlugin.fromClass(
-    class {
-      decorationSet: DecorationSet;
-      placeholders: Placeholder[];
-
-      shiftPlaceholders(
-        fromA: number,
-        toA: number,
-        fromB: number,
-        toB: number
-      ) {
-        const sectionA = toA - fromA;
-        const sectionB = toB - fromB;
-        const addedChars = sectionB - sectionA;
-
-        this.placeholders = this.placeholders.filter((value) => {
-          if (fromA < value.position.end && toA > value.position.start) {
-            return false;
-          }
-
-          if (toA < value.position.start) {
-            value.position.start += addedChars;
-            value.position.end += addedChars;
-          }
-          return true;
-        });
-      }
-
-      shiftByChanges(changes: ChangeSet) {
-        changes.iterChanges((fromA, toA, fromB, toB) => {
-          this.shiftPlaceholders(fromA, toA, fromB, toB);
-        });
-        this.decorationSet = buildSet(this.placeholders);
-      }
-
-      constructor(view: EditorView) {
-        try {
-          this.placeholders = buildPlaceholders(
-            view.state.doc.toString(),
-            undefined
-          );
-          this.decorationSet = buildSet(this.placeholders);
-        } catch (e) {
-          this.decorationSet = buildSet([]);
-          this.placeholders = [];
-        }
-      }
-
-      update(change: ViewUpdate) {
-        if (noUpdates) {
-          this.shiftByChanges(change.changes);
-        }
-
-        if (change.docChanged && !noUpdates) {
-          let modifiedRange: [from: number, to: number] | undefined;
-          change.changes.iterChanges((fromA, toA, fromB, toB) => {
-            const sectionA = toA - fromA;
-            const sectionB = toB - fromB;
-            const addedChars = sectionB - sectionA;
-            // when typing or deleting
-            if (addedChars <= 1) {
-              // skip if the character was modified inside the tag
-              modifiedRange = [fromB, toB];
-            }
-          });
-          let newPlaceholders: Placeholder[] | undefined = undefined;
-          try {
-            newPlaceholders = buildPlaceholders(
-              change.state.doc.toString(),
-              modifiedRange
-            );
-          } catch (e) {
-            this.shiftByChanges(change.changes);
-            return;
-          }
-
-          if (!options?.allowedNewPlaceholders) {
-            this.placeholders = newPlaceholders;
-          } else {
-            this.shiftByChanges(change.changes);
-            this.placeholders = addOnlyAllowed(
-              this.placeholders,
-              newPlaceholders,
-              options.allowedNewPlaceholders
-            );
-          }
-
-          this.decorationSet = buildSet(this.placeholders);
-        }
+export const StatePlugin = (options?: Options) => {
+  const { noUpdates, allowedNewPlaceholders } = options || {};
+  return StateField.define<Placeholder[]>({
+    create(state) {
+      try {
+        return buildPlaceholders(state.doc.toString(), undefined);
+      } catch (e) {
+        return [];
       }
     },
-    {
-      decorations: (instance) => instance.decorationSet,
-      provide: (plugin) =>
-        EditorView.atomicRanges.of((view) => {
-          return view.plugin(plugin)?.decorationSet || Decoration.none;
-        }),
-    }
-  );
+    update(value: Placeholder[], change: Transaction) {
+      if (noUpdates) {
+        return shiftByChanges(value, change.changes);
+      }
+      if (change.docChanged && !noUpdates) {
+        let modifiedRange: [from: number, to: number] | undefined;
+        change.changes.iterChanges((fromA, toA, fromB, toB) => {
+          const sectionA = toA - fromA;
+          const sectionB = toB - fromB;
+          const addedChars = sectionB - sectionA;
+          // when typing or deleting
+          if (addedChars <= 1) {
+            // skip if the character was modified inside the tag
+            modifiedRange = [fromB, toB];
+          }
+        });
+        let newPlaceholders: Placeholder[] | undefined = undefined;
+        try {
+          newPlaceholders = buildPlaceholders(
+            change.state.doc.toString(),
+            modifiedRange
+          );
+        } catch (e) {
+          return shiftByChanges(value, change.changes);
+        }
+
+        if (!allowedNewPlaceholders) {
+          return newPlaceholders;
+        } else {
+          return addOnlyAllowed(
+            value,
+            shiftByChanges(value, change.changes),
+            allowedNewPlaceholders
+          );
+        }
+      }
+      return value;
+    },
+    provide(f) {
+      return ViewPlugin.fromClass(
+        class {
+          decorationSet: DecorationSet;
+          constructor(view: EditorView) {
+            this.decorationSet = buildSet(view.state.field(f));
+          }
+          update(change: ViewUpdate) {
+            this.decorationSet = buildSet(change.state.field(f));
+          }
+        },
+        {
+          decorations: (instance) => instance.decorationSet,
+          provide: (plugin) =>
+            EditorView.atomicRanges.of((view) => {
+              return view.plugin(plugin)?.decorationSet || Decoration.none;
+            }),
+        }
+      );
+    },
+  });
 };

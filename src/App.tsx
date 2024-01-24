@@ -21,11 +21,7 @@ function App() {
       <Editor
         initialValue={value}
         onChange={setValue}
-        placeholders={placeholders ? "full" : "none"}
-        allowedNewPlaceholders={[
-          { type: "hash" },
-          { type: "variable", name: "variable" },
-        ]}
+        placeholders={placeholders ? "initial" : "none"}
       />
       <label>
         <input
