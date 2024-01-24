@@ -7,7 +7,7 @@ export const tolgeeLinter = linter((view) => {
   try {
     parse(view.state.doc.toString(), {
       captureLocation: true,
-      ignoreTag: true,
+      ignoreTag: false,
     });
   } catch (e) {
     error = e;

@@ -1,5 +1,5 @@
 import { DefaultParamType, TranslateParams } from "@tolgee/core";
-import { parser } from "./tolgeeParser";
+import { parser } from "../parser/tolgeeParser";
 import {
   ExpressionClose,
   ExpressionOpen,
@@ -13,7 +13,7 @@ import {
   FormatFunction,
   SelectExpression,
   SelectVariant,
-} from "./tolgeeParser.terms";
+} from "../parser/tolgeeParser.terms";
 import { updateNumberFormatOptions } from "./formatModifiers";
 
 const STATE_TEXT = 0,

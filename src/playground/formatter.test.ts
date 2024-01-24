@@ -1,7 +1,7 @@
 import { TranslateParams } from "@tolgee/core";
 import { formatter } from "./formatter";
 import IntlMessageFormat from "intl-messageformat";
-import { locales } from "./locales";
+import { locales } from "./testing_locales";
 
 function icu(locale: string, text: string, params?: TranslateParams) {
   return new IntlMessageFormat(text, locale, undefined, {

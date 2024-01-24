@@ -3,10 +3,10 @@ import { EditorView, ViewUpdate } from "@codemirror/view";
 import { useEffect, useRef } from "react";
 import { minimalSetup } from "@uiw/react-codemirror";
 import { tolgeeSyntax } from "../parser/tolgeeSyntax";
-import { tolgeeLinter } from "./tolgeeLinter";
-import { placeholderPlugin } from "./PlaceholderPlugin";
+import { tolgeeLinter } from "../playground/tolgeeLinter";
+import { PlaceholderPlugin } from "../parser/PlaceholderPlugin";
 import styled from "@emotion/styled";
-import { tooltipPlugin } from "./TooltipPlugin";
+import { Placeholder } from "../parser/getPlaceholders";
 
 const StyledEditor = styled("div")`
   font-size: 14px;
@@ -37,13 +37,15 @@ const StyledEditor = styled("div")`
 type Props = {
   initialValue: string;
   onChange?: (val: string) => void;
-  placeholders?: boolean;
+  placeholders?: "initial" | "full" | "none";
+  allowedNewPlaceholders?: Partial<Placeholder>[];
 };
 
 export const Editor: React.FC<Props> = ({
   initialValue,
   onChange,
   placeholders,
+  allowedNewPlaceholders,
 }) => {
   const ref = useRef<HTMLDivElement>(null);
   const editor = useRef<EditorView>();
@@ -77,7 +79,15 @@ export const Editor: React.FC<Props> = ({
   }, []);
 
   useEffect(() => {
-    const plugins = placeholders ? [placeholderPlugin, tooltipPlugin] : [];
+    const plugins =
+      placeholders === "none"
+        ? []
+        : [
+            PlaceholderPlugin({
+              noUpdates: placeholders === "initial",
+              allowedNewPlaceholders,
+            }),
+          ];
     editor.current?.dispatch({
       effects: compartment.current?.reconfigure(plugins),
     });

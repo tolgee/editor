@@ -2,7 +2,6 @@ import { hoverTooltip } from "@codemirror/view";
 import { getPlaceholders } from "../parser/getPlaceholders";
 
 export const tooltipPlugin = hoverTooltip((view, pos) => {
-  console.log("here");
   try {
     const placeholder = getPlaceholders(view.state.doc.toString()).find(
       (item) =>
