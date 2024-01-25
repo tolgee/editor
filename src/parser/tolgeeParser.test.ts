@@ -108,10 +108,6 @@ describe("simple formatter", () => {
   // plurals
   test(`I have {num, plural, one {# one} two {# two} few {# few} many {# many} other {# other} } tests`, () => {
     matchIcu();
-    matchIcu();
-    matchIcu();
-    matchIcu();
-    matchIcu();
   });
 
   test(`I have {num, plural, one {# one} two {# two} other {# other} few {# few} many {# many} } tests`, () => {

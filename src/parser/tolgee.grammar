@@ -9,7 +9,7 @@ HtmlTag { HtmlTagOpen | HtmlTagClose }
 HtmlTagOpen { "<" TagName space? ">" }
 HtmlTagClose { "<" "/" TagName space? ">" }
 
-FormatExpression { space? Param space? ("," space? FormatFunction space? ("," FormatStyle)?)? }
+FormatExpression { space? Param space? ("," space? FormatFunction space? ("," (space? FormatStyle)+ space?)?)? }
 SelectExpression { space? Param space? "," space? SelectFunction space? "," (space? Offset)? (space? SelectVariant)+ space? }
 SelectVariant { VariantDescriptor space? "{" nested_content "}" }
 
@@ -57,7 +57,9 @@ TagName { tag_name }
   variant_descriptor { name }
   space  { @whitespace+ }
   format_function { 'number' | 'date' | 'time' }
-  format_style { ![}]+ }
+  // non-White_Space
+  // https://www.unicode.org/Public/UCD/latest/ucd/PropList.txt
+  format_style { ![,}\u{0009}-\u{000d}\u{0020}\u{0085}\u{00A0}\u{1680}\u{2000}-\u{200A}\u{2028}\u{2029}\u{202F}\u{205F}\u{3000}]+ }
   // https://html.spec.whatwg.org/multipage/custom-elements.html#valid-custom-element-name
   tag_name { $[-.0-9_a-zA-Z\u{b7}\u{c0}-\u{d6}\u{d8}-\u{f6}\u{f8}-\u{37d}\u{37f}-\u{1fff}\u{200c}-\u{200d}\u{203f}-\u{2040}\u{2070}-\u{218f}\u{2c00}-\u{2fef}\u{3001}-\u{d7ff}\u{f900}-\u{fdcf}\u{fdf0}-\u{fffd}\u{10000}-\u{effff}]+ }
 

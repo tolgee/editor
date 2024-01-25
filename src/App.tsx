@@ -21,7 +21,7 @@ function App() {
       <Editor
         initialValue={value}
         onChange={setValue}
-        placeholders={placeholders ? "initial" : "none"}
+        placeholders={placeholders ? "full" : "none"}
       />
       <label>
         <input
