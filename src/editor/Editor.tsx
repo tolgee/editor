@@ -4,7 +4,7 @@ import { useEffect, useRef } from "react";
 import { minimalSetup } from "@uiw/react-codemirror";
 import { tolgeeSyntax } from "../parser/tolgeeSyntax";
 import { tolgeeLinter } from "../playground/tolgeeLinter";
-import { StatePlugin } from "../parser/PlaceholderPlugin";
+import { PlaceholderPlugin } from "../parser/PlaceholderPlugin";
 import styled from "@emotion/styled";
 import { Placeholder } from "../parser/getPlaceholders";
 
@@ -83,7 +83,7 @@ export const Editor: React.FC<Props> = ({
       placeholders === "none"
         ? []
         : [
-            StatePlugin({
+            PlaceholderPlugin({
               noUpdates: placeholders === "initial",
               allowedNewPlaceholders,
             }),

@@ -132,7 +132,7 @@ export type Options = {
   allowedNewPlaceholders?: Partial<Placeholder>[];
 };
 
-export const StatePlugin = (options?: Options) => {
+export const PlaceholderPlugin = (options?: Options) => {
   const { noUpdates, allowedNewPlaceholders } = options || {};
   return StateField.define<Placeholder[]>({
     create(state) {

@@ -8,9 +8,9 @@ export default defineConfig({
   build: {
     lib: {
       // Could also be a dictionary or array of multiple entry points
-      entry: resolve(__dirname, "src/parser/formatter.ts"),
-      fileName: "formatter",
-      name: "formatter",
+      entry: resolve(__dirname, "src/tolgee-editor.ts"),
+      fileName: "tolgee-editor",
+      name: "@tolgee/editor",
     },
     rollupOptions: {},
   },

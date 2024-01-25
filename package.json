@@ -1,11 +1,12 @@
 {
-  "name": "tolgee-editor",
+  "name": "@tolgee/editor",
   "private": true,
   "version": "0.0.0",
   "type": "module",
+
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
+    "build": "tsc -p tsconfig.lib.json && vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "grammar": "lezer-generator ./src/parser/tolgee.grammar -o ./src/parser/tolgeeParser.ts",
     "preview": "vite preview",
