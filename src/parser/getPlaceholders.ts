@@ -5,22 +5,12 @@ import {
   HtmlTagOpen,
   Param,
   PluralPlaceholder,
+  SelectExpression,
   TagName,
 } from "./tolgeeParser.terms";
 
 import type { SyntaxNode } from "@lezer/common";
-
-type Position = {
-  start: number;
-  end: number;
-};
-
-export type Placeholder = {
-  type: "variable" | "tagOpen" | "tagClose" | "hash";
-  position: Position;
-  name?: string;
-  error?: "missing_open_tag" | "missing_close_tag";
-};
+import { Placeholder } from "./types";
 
 export const getPlaceholders = (input: string) => {
   const tree = parser.configure({ strict: true }).parse(input);
@@ -81,6 +71,12 @@ export const getPlaceholders = (input: string) => {
             position: { start: cursor.from, end: cursor.to },
             rootNode: node,
           };
+        }
+        break;
+      case SelectExpression:
+        if (!current?.name) {
+          // if it's select we don't want to use placeholder
+          current = undefined;
         }
         break;
       case Param:

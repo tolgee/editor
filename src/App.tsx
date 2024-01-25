@@ -1,37 +1,55 @@
 import { useMemo, useState } from "react";
 import { Editor } from "./editor/Editor";
-import { getPlaceholders } from "./parser/getPlaceholders";
+import { getTolgeePlurals } from "./parser/getTolgeePlurals";
+import { EditorMulti } from "./editor/EditorMulti";
 
 function App() {
   const [value, setValue] = useState(
-    `This {variable} and this is <hi>tag</hi>`
+    `{value, plural, one {I have # apple} other {I have # apples}}`
   );
   const [placeholders, setPlaceholders] = useState(true);
 
-  const tokens = useMemo(() => {
-    try {
-      return JSON.stringify(getPlaceholders(value), null, 2);
-    } catch {
-      // pass
-    }
+  const parsedValue = useMemo(() => {
+    return getTolgeePlurals(value);
   }, [value]);
+
+  const [plurals, setPlurals] = useState(Boolean(parsedValue));
 
   return (
     <div>
-      <Editor
-        initialValue={value}
-        onChange={setValue}
-        placeholders={placeholders ? "full" : "none"}
-      />
-      <label>
-        <input
-          type="checkbox"
-          checked={placeholders}
-          onChange={() => setPlaceholders((placeholders) => !placeholders)}
+      {plurals ? (
+        <EditorMulti
+          value={parsedValue!}
+          locale="en"
+          placeholders={placeholders ? "full" : "none"}
         />
-        Placeholders
-      </label>
-      <pre>{tokens}</pre>
+      ) : (
+        <Editor
+          initialValue={value}
+          onChange={setValue}
+          placeholders={placeholders ? "full" : "none"}
+        />
+      )}
+      <div>
+        <label>
+          <input
+            type="checkbox"
+            checked={placeholders}
+            onChange={() => setPlaceholders((val) => !val)}
+          />
+          Placeholders
+        </label>
+      </div>
+      <div>
+        <label>
+          <input
+            type="checkbox"
+            checked={plurals}
+            onChange={() => setPlurals((val) => !val)}
+          />
+          Plurals
+        </label>
+      </div>
     </div>
   );
 }

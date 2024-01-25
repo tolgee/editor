@@ -11,7 +11,8 @@ HtmlTagClose { "<" "/" TagName space? ">" }
 
 FormatExpression { space? Param space? ("," space? FormatFunction space? ("," (space? FormatStyle)+ space?)?)? }
 SelectExpression { space? Param space? "," space? SelectFunction space? "," (space? Offset)? (space? SelectVariant)+ space? }
-SelectVariant { VariantDescriptor space? "{" nested_content "}" }
+SelectVariant { VariantDescriptor space? "{" VariantContent "}" }
+VariantContent { nested_content? }
 
 Offset { offset_definition }
 SelectFunction { select_function }

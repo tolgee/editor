@@ -6,13 +6,14 @@ import {
   ViewUpdate,
   WidgetType,
 } from "@codemirror/view";
-import { Placeholder, getPlaceholders } from "./getPlaceholders";
+import { getPlaceholders } from "./getPlaceholders";
 import {
   ChangeSet,
   RangeSetBuilder,
   StateField,
   Transaction,
 } from "@codemirror/state";
+import { Placeholder } from "./types";
 
 class PlaceholderWidget extends WidgetType {
   value: Placeholder;

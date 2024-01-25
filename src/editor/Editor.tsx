@@ -6,7 +6,7 @@ import { tolgeeSyntax } from "../parser/tolgeeSyntax";
 import { tolgeeLinter } from "../playground/tolgeeLinter";
 import { PlaceholderPlugin } from "../parser/PlaceholderPlugin";
 import styled from "@emotion/styled";
-import { Placeholder } from "../parser/getPlaceholders";
+import { Placeholder } from "../parser/types";
 
 const StyledEditor = styled("div")`
   font-size: 14px;
