@@ -15,11 +15,11 @@
     "test": "jest",
     "release": "semantic-release"
   },
-  "directories": {
-    "lib": "lib",
-    "dist": "dist",
-    "src": "src"
-  },
+  "files": [
+    "lib/**/*",
+    "dist/**/*",
+    "src/**/*"
+  ],
   "peerDependencies": {
     "@codemirror/lint": "^6.4.2",
     "@codemirror/state": "^6.4.0",
