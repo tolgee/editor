@@ -1,4 +1,4 @@
-# @tolgee/editor package
+# @tginternal/editor package
 
 Package which contains codemirror and other parsing tools plugin for Tolgee format, so it can be used in Tolgee Platform and also in SDKs.
 
