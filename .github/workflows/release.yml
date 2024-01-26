@@ -25,7 +25,6 @@ jobs:
         run: npm ci
 
       - name: Build
-        if: ${{ steps.version.outputs.VERSION != '' }}
         run: npm run build
 
       - run: echo '//registry.npmjs.org/:_authToken=${NPM_TOKEN}' > ~/.npmrc
