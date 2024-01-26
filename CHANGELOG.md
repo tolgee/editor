@@ -1,3 +1,10 @@
+## [1.1.2](https://github.com/tolgee/editor/compare/v1.1.1...v1.1.2) (2024-01-26)
+
+
+### Bug Fixes
+
+* fix CI ([6dc35cb](https://github.com/tolgee/editor/commit/6dc35cb0a93af05ad338c225616914434c20f589))
+
 ## [1.1.1](https://github.com/tolgee/editor/compare/v1.1.0...v1.1.1) (2024-01-26)
 
 
