@@ -1,3 +1,10 @@
+## [1.1.1](https://github.com/tolgee/editor/compare/v1.1.0...v1.1.1) (2024-01-26)
+
+
+### Bug Fixes
+
+* fix private property in package.json ([065d532](https://github.com/tolgee/editor/commit/065d53213b307488eeb706b8a563a674489fd7bb))
+
 # [1.1.0](https://github.com/tolgee/editor/compare/v1.0.0...v1.1.0) (2024-01-26)
 
 
