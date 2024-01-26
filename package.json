@@ -63,7 +63,7 @@
       "@semantic-release/release-notes-generator",
       "@semantic-release/changelog",
       "@semantic-release/git",
-      "@semanitc-release/npm"
+      "@semantic-release/npm"
     ],
     "branches": [
       {
