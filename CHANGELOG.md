@@ -1,3 +1,10 @@
+## [1.1.4](https://github.com/tolgee/editor/compare/v1.1.3...v1.1.4) (2024-01-26)
+
+
+### Bug Fixes
+
+* files field in package.json ([e8a7fa8](https://github.com/tolgee/editor/commit/e8a7fa8267807d150628fcf9e7ecd09ef222ba73))
+
 ## [1.1.3](https://github.com/tolgee/editor/compare/v1.1.2...v1.1.3) (2024-01-26)
 
 
