@@ -12,6 +12,7 @@ export default defineConfig({
       entry: resolve(__dirname, "src/tolgee-editor.ts"),
       fileName: "tolgee-editor",
       name: "@tolgee/editor",
+      formats: ["es"],
     },
     rollupOptions: {},
   },
