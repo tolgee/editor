@@ -20,7 +20,6 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '20'
-          registry-url: 'https://registry.npmjs.org'
 
       - name: Install
         run: npm ci
@@ -28,6 +27,8 @@ jobs:
       - name: Build
         if: ${{ steps.version.outputs.VERSION != '' }}
         run: npm run build
+
+      - run: echo '//registry.npmjs.org/:_authToken=${NPM_TOKEN}' > ~/.npmrc
 
       - name: Run npm release
         run: npm run release
