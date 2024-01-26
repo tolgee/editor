@@ -1,3 +1,10 @@
+# [1.1.0](https://github.com/tolgee/editor/compare/v1.0.0...v1.1.0) (2024-01-26)
+
+
+### Features
+
+* update readme ([da4b6a4](https://github.com/tolgee/editor/commit/da4b6a41293077e86e343f8fbdfe0ca391b46c85))
+
 # 1.0.0 (2024-01-26)
 
 
