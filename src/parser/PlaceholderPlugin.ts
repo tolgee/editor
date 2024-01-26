@@ -40,6 +40,11 @@ function buildPlaceholders(
   modifiedRange: [from: number, to: number] | undefined
 ) {
   const placeholders = getPlaceholders(text);
+
+  if (placeholders === null) {
+    return null;
+  }
+
   return placeholders.filter((value) => {
     if (modifiedRange) {
       const [from, to] = modifiedRange;
@@ -138,7 +143,7 @@ export const PlaceholderPlugin = (options?: Options) => {
   return StateField.define<Placeholder[]>({
     create(state) {
       try {
-        return buildPlaceholders(state.doc.toString(), undefined);
+        return buildPlaceholders(state.doc.toString(), undefined) || [];
       } catch (e) {
         return [];
       }
@@ -159,13 +164,11 @@ export const PlaceholderPlugin = (options?: Options) => {
             modifiedRange = [fromB, toB];
           }
         });
-        let newPlaceholders: Placeholder[] | undefined = undefined;
-        try {
-          newPlaceholders = buildPlaceholders(
-            change.state.doc.toString(),
-            modifiedRange
-          );
-        } catch (e) {
+        const newPlaceholders = buildPlaceholders(
+          change.state.doc.toString(),
+          modifiedRange
+        );
+        if (newPlaceholders === null) {
           return shiftByChanges(value, change.changes);
         }
 

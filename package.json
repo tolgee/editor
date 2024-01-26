@@ -9,7 +9,8 @@
     "dev": "vite",
     "build": "tsc -p tsconfig.lib.json && vite build",
     "build:watch": "concurrently \"tsc -p tsconfig.lib.json -w\" \"vite build -w\"",
-    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "eslint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "tsc": "tsc --noEmit",
     "grammar": "lezer-generator ./src/parser/tolgee.grammar -o ./src/parser/tolgeeParser.ts",
     "preview": "vite preview",
     "test": "jest"

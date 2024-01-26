@@ -76,6 +76,7 @@ export const Editor: React.FC<Props> = ({
 
     editor.current = instance;
     return () => instance.destroy();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -91,6 +92,7 @@ export const Editor: React.FC<Props> = ({
     editor.current?.dispatch({
       effects: compartment.current?.reconfigure(plugins),
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [placeholders]);
 
   return <StyledEditor ref={ref} />;
