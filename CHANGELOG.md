@@ -1,3 +1,10 @@
+## [1.1.3](https://github.com/tolgee/editor/compare/v1.1.2...v1.1.3) (2024-01-26)
+
+
+### Bug Fixes
+
+* package.json version ([cae11ba](https://github.com/tolgee/editor/commit/cae11ba9e8a83051bced543aa0a4eb36f16357b1))
+
 ## [1.1.2](https://github.com/tolgee/editor/compare/v1.1.1...v1.1.2) (2024-01-26)
 
 
