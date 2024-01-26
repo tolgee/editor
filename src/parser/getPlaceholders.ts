@@ -9,11 +9,16 @@ import {
   TagName,
 } from "./tolgeeParser.terms";
 
-import type { SyntaxNode } from "@lezer/common";
+import type { SyntaxNode, Tree } from "@lezer/common";
 import { Placeholder } from "./types";
 
 export const getPlaceholders = (input: string) => {
-  const tree = parser.configure({ strict: true }).parse(input);
+  let tree: Tree;
+  try {
+    tree = parser.configure({ strict: true }).parse(input);
+  } catch (e) {
+    return null;
+  }
 
   let cursor = tree.cursor();
   let current: (Partial<Placeholder> & { rootNode: SyntaxNode }) | undefined =
@@ -25,7 +30,7 @@ export const getPlaceholders = (input: string) => {
 
   function pushCurrent() {
     const placeholder: Placeholder = {
-      name: current!.name,
+      name: current!.name!,
       type: current!.type!,
       position: current!.position!,
     };
@@ -59,6 +64,7 @@ export const getPlaceholders = (input: string) => {
       case PluralPlaceholder:
         if (!current) {
           result.push({
+            name: "#",
             type: "hash",
             position: { start: cursor.from, end: cursor.to },
           });
@@ -76,6 +82,7 @@ export const getPlaceholders = (input: string) => {
       case SelectExpression:
         if (!current?.name) {
           // if it's select we don't want to use placeholder
+          cursor = current!.rootNode.lastChild!.cursor();
           current = undefined;
         }
         break;

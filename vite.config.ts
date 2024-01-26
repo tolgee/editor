@@ -2,6 +2,7 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import { exec } from "node:child_process";
 import { resolve } from "node:path";
+import { externalizeDeps } from "vite-plugin-externalize-deps";
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -16,6 +17,7 @@ export default defineConfig({
   },
   plugins: [
     react(),
+    externalizeDeps(),
     {
       name: "build-parser",
       watchChange(id) {
