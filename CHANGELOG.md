@@ -1,3 +1,10 @@
+# [1.2.0](https://github.com/tolgee/editor/compare/v1.1.5...v1.2.0) (2024-01-29)
+
+
+### Features
+
+* add tolgeeHighlight ([35b78d2](https://github.com/tolgee/editor/commit/35b78d201999a6d9e45be3e8d39bdd55e4f40260))
+
 ## [1.1.5](https://github.com/tolgee/editor/compare/v1.1.4...v1.1.5) (2024-01-26)
 
 
