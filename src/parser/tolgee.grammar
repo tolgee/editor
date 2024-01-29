@@ -7,10 +7,10 @@ Expression { ExpressionOpen (FormatExpression | SelectExpression) ExpressionClos
 
 HtmlTag { HtmlTagOpen | HtmlTagClose }
 HtmlTagOpen { "<" TagName space? ">" }
-HtmlTagClose { "<" "/" TagName space? ">" }
+HtmlTagClose { "<" Slash TagName space? ">" }
 
-FormatExpression { space? Param space? ("," space? FormatFunction space? ("," (space? FormatStyle)+ space?)?)? }
-SelectExpression { space? Param space? "," space? SelectFunction space? "," (space? Offset)? (space? SelectVariant)+ space? }
+FormatExpression { space? Param space? (Sep space? FormatFunction space? (Sep (space? FormatStyle)+ space?)?)? }
+SelectExpression { space? Param space? Sep space? SelectFunction space? Sep (space? Offset)? (space? SelectVariant)+ space? }
 SelectVariant { VariantDescriptor space? "{" VariantContent "}" }
 VariantContent { nested_content? }
 
@@ -32,7 +32,8 @@ TagName { tag_name }
   "}"
   "<"
   ">"
-  "/"
+  Sep { "," }
+  Slash { "/" }
   offset_definition { "offset:" $[+-]? $[0-9]+ }
   plural_placeholder { '#' }
   // non-White_Space and non-PatternSyntax

@@ -12,9 +12,9 @@ import { TolgeeFormat } from "./types";
 const REQUIRED_NODES: Record<number, number | undefined> = {
   0: Expression,
   4: Param,
-  5: SelectFunction,
+  6: SelectFunction,
   // this also excludes 'offset:x'
-  6: SelectVariant,
+  8: SelectVariant,
 };
 
 function getNodeText(node: SyntaxNode, input: string) {

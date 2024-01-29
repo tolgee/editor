@@ -5,7 +5,8 @@ import { EditorMulti } from "./editor/EditorMulti";
 
 function App() {
   const [value, setValue] = useState(
-    `{value, plural, one {I have # apple} other {I have # apples}}`
+    `I have {value, number, ::short} items in basket.
+This is <i>italic</i>.`
   );
   const [placeholders, setPlaceholders] = useState(true);
 

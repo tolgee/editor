@@ -7,30 +7,14 @@ import { tolgeeLinter } from "../playground/tolgeeLinter";
 import { PlaceholderPlugin } from "../parser/PlaceholderPlugin";
 import styled from "@emotion/styled";
 import { Placeholder } from "../parser/types";
+import { tolgeeHighlight } from "../parser/tolgeeHighlight";
+import { tolgeeThemeBase } from "../tolgee-editor";
 
 const StyledEditor = styled("div")`
-  font-size: 14px;
-
-  & .placeholder-widget {
-    border: 1px solid #2e2e2e4e;
-    border-radius: 10px;
-    padding: 1px 4px;
-    font-size: 12px;
-    user-select: none;
-  }
-
-  & .placeholder-tagOpen {
-    border-radius: 10px 0px 0px 10px;
-    padding-right: 2px;
-  }
-
-  & .placeholder-tagClose {
-    border-radius: 0px 10px 10px 0px;
-    padding-left: 2px;
-  }
-
-  & .placeholder-error {
-    background: #ff000054;
+  .cm-line {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+      Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
+      "Segoe UI Symbol";
   }
 `;
 
@@ -70,6 +54,8 @@ export const Editor: React.FC<Props> = ({
           languageCompartment.of(tolgeeSyntax()),
           tolgeeLinter,
           compartment.current.of([]),
+          tolgeeThemeBase,
+          tolgeeHighlight,
         ],
       }),
     });

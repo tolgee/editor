@@ -22,16 +22,19 @@ class PlaceholderWidget extends WidgetType {
     this.value = value;
   }
   toDOM(): HTMLElement {
-    const span = document.createElement("span");
+    const spanOuter = document.createElement("span");
     let classes = `placeholder-widget placeholder-${this.value.type}`;
 
     if (this.value.error) {
       classes =
         classes + ` placeholder-error placeholder-error-${this.value.error}`;
     }
-    span.className = classes;
-    span.textContent = this.value.name || "#";
-    return span;
+    spanOuter.className = classes;
+
+    const spanInner = document.createElement("span");
+    spanInner.textContent = this.value.name || "#";
+    spanOuter.appendChild(spanInner);
+    return spanOuter;
   }
 }
 

@@ -10,12 +10,19 @@ export const lezerLanguage = LRLanguage.define({
   parser: parser.configure({
     props: [
       styleTags({
-        Param: t.variableName,
         TextRoot: t.string,
         Text: t.string,
-        VariantDescriptor: t.variableName,
+        PluralPlaceholder: t.keyword,
+        VariantDescriptor: t.keyword,
+        FormatFunction: t.keyword,
+        SelectFunction: t.keyword,
+        Param: t.variableName,
+        FormatStyle: t.variableName,
         "{ }": t.paren,
-        HtmlTag: t.variableName,
+        Sep: t.separator,
+        "< >": t.tagName,
+        Slash: t.tagName,
+        TagName: t.tagName,
       }),
     ],
   }),
