@@ -51,12 +51,14 @@ export const tolgeeThemeBase = EditorView.baseTheme({
     paddingLeft: "8px",
   },
 
-  '*[dir="rtl"] .placeholder-widget': {
-    transform: "scaleX(-1)",
+  // in rtl mode, revert the placeholders direction
+  '*[dir="rtl"] .placeholder-widget.placeholder-tagOpen': {
+    borderRadius: "0px 12px 12px 0px",
+    paddingLeft: "8px",
   },
-
-  '*[dir="rtl"] .placeholder-widget > *': {
-    transform: "scaleX(-1)",
+  '*[dir="rtl"] .placeholder-widget.placeholder-tagClose': {
+    borderRadius: "12px 0px 0px 12px",
+    paddingRight: "8px",
   },
 });
 
