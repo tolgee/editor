@@ -50,6 +50,14 @@ export const tolgeeThemeBase = EditorView.baseTheme({
     borderRadius: "0px 12px 12px 0px",
     paddingLeft: "8px",
   },
+
+  '*[dir="rtl"] .placeholder-widget': {
+    transform: "scaleX(-1)",
+  },
+
+  '*[dir="rtl"] .placeholder-widget > *': {
+    transform: "scaleX(-1)",
+  },
 });
 
 export const tolgeeThemeDark = EditorView.theme({
