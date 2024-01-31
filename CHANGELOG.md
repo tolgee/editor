@@ -1,3 +1,10 @@
+# [1.3.0](https://github.com/tolgee/editor/compare/v1.2.0...v1.3.0) (2024-01-31)
+
+
+### Features
+
+* better support for rtl languages ([478213a](https://github.com/tolgee/editor/commit/478213ad7f2c798a57ac8519a807e4f4fc1fabbb))
+
 # [1.2.0](https://github.com/tolgee/editor/compare/v1.1.5...v1.2.0) (2024-01-29)
 
 
