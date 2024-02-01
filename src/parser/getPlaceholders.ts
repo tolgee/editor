@@ -1,16 +1,29 @@
 import { parser } from "./tolgeeParser";
 import {
   Expression,
-  HtmlTagClose,
+  FormatExpression,
+  FormatFunction,
+  FormatStyle,
+  HtmlTag,
   HtmlTagOpen,
   Param,
   PluralPlaceholder,
-  SelectExpression,
   TagName,
 } from "./tolgeeParser.terms";
 
 import type { SyntaxNode, Tree } from "@lezer/common";
 import { Placeholder } from "./types";
+
+function getAllChildren(node: SyntaxNode) {
+  const result: SyntaxNode[] = [];
+  let child: SyntaxNode | null = node.firstChild!;
+
+  while (child) {
+    result.push(child);
+    child = child.nextSibling;
+  }
+  return result;
+}
 
 export const getPlaceholders = (input: string) => {
   let tree: Tree;
@@ -20,21 +33,70 @@ export const getPlaceholders = (input: string) => {
     return null;
   }
 
-  let cursor = tree.cursor();
-  let current: (Partial<Placeholder> & { rootNode: SyntaxNode }) | undefined =
-    undefined;
-
   const result: Placeholder[] = [];
 
   const openTags = new Map<string, Placeholder[]>();
 
-  function pushCurrent() {
-    const placeholder: Placeholder = {
-      name: current!.name!,
-      type: current!.type!,
-      position: current!.position!,
-    };
+  function getNodeText(node: SyntaxNode) {
+    return input.substring(node.from, node.to);
+  }
 
+  function placeholderFromFormatExpression(node: SyntaxNode) {
+    const rootNode = node.parent!;
+    let name = "";
+    let formatFunction: string | undefined = undefined;
+    const formatStyle: string[] = [];
+
+    getAllChildren(node).forEach((child) => {
+      const text = getNodeText(child);
+      switch (child.type.id) {
+        case Param:
+          name = text;
+          break;
+        case FormatFunction:
+          formatFunction = text;
+          break;
+        case FormatStyle:
+          formatStyle.push(text);
+          break;
+      }
+    });
+
+    const normalizedValue = ["{", name];
+    if (formatFunction) {
+      normalizedValue.push(", ");
+      normalizedValue.push(formatFunction);
+    }
+    if (formatStyle.length) {
+      normalizedValue.push(`, ${formatStyle.join(" ")}`);
+    }
+    normalizedValue.push("}");
+
+    return {
+      position: { start: rootNode.from, end: rootNode.to },
+      type: "variable",
+      name,
+      normalizedValue: normalizedValue.join(""),
+    } satisfies Placeholder;
+  }
+
+  function placeholderFromTag(htmlTag: SyntaxNode) {
+    const innerNode = htmlTag.firstChild!;
+    const nameNode = getAllChildren(innerNode).find(
+      (node) => node.type.id === TagName
+    )!;
+
+    const isOpen = innerNode.type.id === HtmlTagOpen;
+    const name = getNodeText(nameNode);
+    return {
+      position: { start: innerNode.from, end: innerNode.to },
+      type: isOpen ? "tagOpen" : "tagClose",
+      name,
+      normalizedValue: isOpen ? `<${name}>` : `</${name}>`,
+    } satisfies Placeholder;
+  }
+
+  function addPlaceholder(placeholder: Placeholder) {
     if (placeholder.type === "tagOpen") {
       const values = openTags.get(placeholder.name!) ?? [];
       values.push(placeholder);
@@ -52,72 +114,42 @@ export const getPlaceholders = (input: string) => {
     }
 
     result.push(placeholder);
-    cursor = current!.rootNode.lastChild!.cursor();
-    current = undefined;
   }
 
+  const cursor = tree.cursor();
+  let enter: boolean;
   do {
     const node = cursor.node;
-    const text = input.substring(cursor.from, cursor.to);
-
     switch (node.type.id) {
       case PluralPlaceholder:
-        if (!current) {
-          result.push({
-            name: "#",
-            type: "hash",
-            position: { start: cursor.from, end: cursor.to },
-          });
-        }
+        addPlaceholder({
+          name: "#",
+          type: "hash",
+          position: { start: cursor.from, end: cursor.to },
+          normalizedValue: "#",
+        });
+        enter = false;
         break;
-      case Expression:
-        if (!current) {
-          current = {
-            type: "variable",
-            position: { start: cursor.from, end: cursor.to },
-            rootNode: node,
-          };
+
+      case Expression: {
+        const innerExpression = node.firstChild!.nextSibling!;
+        if (innerExpression?.type.id === FormatExpression) {
+          addPlaceholder(placeholderFromFormatExpression(innerExpression));
         }
+        enter = false;
         break;
-      case SelectExpression:
-        if (!current?.name) {
-          // if it's select we don't want to use placeholder
-          cursor = current!.rootNode.lastChild!.cursor();
-          current = undefined;
-        }
+      }
+
+      case HtmlTag:
+        addPlaceholder(placeholderFromTag(node));
+        enter = false;
         break;
-      case Param:
-        if (current?.type === "variable" && !current.name) {
-          current.name = text;
-          pushCurrent();
-        }
-        break;
-      case HtmlTagOpen:
-        if (!current) {
-          current = {
-            type: "tagOpen",
-            position: { start: cursor.from, end: cursor.to },
-            rootNode: node,
-          };
-        }
-        break;
-      case HtmlTagClose:
-        if (!current) {
-          current = {
-            type: "tagClose",
-            position: { start: cursor.from, end: cursor.to },
-            rootNode: node,
-          };
-        }
-        break;
-      case TagName:
-        if (current?.type === "tagClose" || current?.type === "tagOpen") {
-          current.name = text;
-          pushCurrent();
-        }
+
+      default:
+        enter = true;
         break;
     }
-  } while (cursor.next());
+  } while (cursor.next(enter));
 
   openTags.forEach((values) =>
     values.forEach((placeholder) => {

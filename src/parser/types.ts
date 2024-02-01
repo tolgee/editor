@@ -8,6 +8,7 @@ export type Placeholder = {
   position: Position;
   name: string;
   error?: "missing_open_tag" | "missing_close_tag";
+  normalizedValue: string;
 };
 
 export type TolgeeFormat = {

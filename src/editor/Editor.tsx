@@ -1,6 +1,6 @@
 import { Compartment, EditorState } from "@codemirror/state";
 import { EditorView, ViewUpdate } from "@codemirror/view";
-import { useEffect, useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { minimalSetup } from "@uiw/react-codemirror";
 import { tolgeeSyntax } from "../parser/tolgeeSyntax";
 import { tolgeeLinter } from "../playground/tolgeeLinter";
@@ -8,13 +8,21 @@ import { PlaceholderPlugin } from "../parser/PlaceholderPlugin";
 import styled from "@emotion/styled";
 import { Placeholder } from "../parser/types";
 import { tolgeeHighlight } from "../parser/tolgeeHighlight";
-import { tolgeeThemeBase } from "../tolgee-editor";
+import { generatePlaceholdersStyle } from "../parser/placeholdersStyle";
 
 const StyledEditor = styled("div")`
   .cm-line {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
       Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
       "Segoe UI Symbol";
+    color: black,
+    font-size: 15px;
+  }
+  .cm-cursor {
+    border-left-color: black,
+  }
+  .cm-selectionBackground {
+    background-color: #d5d5d5 !important;
   }
 `;
 
@@ -31,6 +39,12 @@ export const Editor: React.FC<Props> = ({
   placeholders,
   allowedNewPlaceholders,
 }) => {
+  const StyledEditorWrapper = useMemo(() => {
+    return generatePlaceholdersStyle({
+      styled,
+      component: StyledEditor,
+    });
+  }, []);
   const ref = useRef<HTMLDivElement>(null);
   const editor = useRef<EditorView>();
   const compartment = useRef<Compartment>();
@@ -54,7 +68,6 @@ export const Editor: React.FC<Props> = ({
           languageCompartment.of(tolgeeSyntax()),
           tolgeeLinter,
           compartment.current.of([]),
-          tolgeeThemeBase,
           tolgeeHighlight,
         ],
       }),
@@ -81,5 +94,5 @@ export const Editor: React.FC<Props> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [placeholders]);
 
-  return <StyledEditor ref={ref} />;
+  return <StyledEditorWrapper ref={ref} />;
 };
