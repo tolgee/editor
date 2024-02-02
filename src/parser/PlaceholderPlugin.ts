@@ -16,11 +16,13 @@ import {
 import { Placeholder } from "./types";
 
 class PlaceholderWidget extends WidgetType {
-  value: Placeholder;
-  constructor(value: Placeholder) {
+  constructor(
+    public value: Placeholder,
+    public examplePluralNum: number | undefined
+  ) {
     super();
-    this.value = value;
   }
+
   toDOM(): HTMLElement {
     const spanOuter = document.createElement("span");
     let classes = `placeholder-widget placeholder-${this.value.type}`;
@@ -32,7 +34,10 @@ class PlaceholderWidget extends WidgetType {
     spanOuter.className = classes;
 
     const spanInner = document.createElement("span");
-    spanInner.textContent = this.value.name || "#";
+    spanInner.textContent =
+      this.value.type !== "hash"
+        ? this.value.name
+        : `#${this.examplePluralNum ?? ""}`;
     spanOuter.appendChild(spanInner);
     return spanOuter;
   }
@@ -59,14 +64,17 @@ function buildPlaceholders(
   });
 }
 
-function buildSet(placeholders: Placeholder[]) {
+function buildSet(
+  placeholders: Placeholder[],
+  examplePluralNum: number | undefined
+) {
   const builder = new RangeSetBuilder<Decoration>();
   placeholders.forEach((value) => {
     builder.add(
       value.position.start,
       value.position.end,
       Decoration.widget({
-        widget: new PlaceholderWidget(value),
+        widget: new PlaceholderWidget(value, examplePluralNum),
         side: 1,
       })
     );
@@ -139,6 +147,7 @@ function shiftByChanges(placeholders: Placeholder[], changes: ChangeSet) {
 export type Options = {
   noUpdates?: boolean;
   allowedNewPlaceholders?: Partial<Placeholder>[];
+  examplePluralNum?: number;
 };
 
 export const PlaceholderPlugin = (options?: Options) => {
@@ -192,10 +201,16 @@ export const PlaceholderPlugin = (options?: Options) => {
         class {
           decorationSet: DecorationSet;
           constructor(view: EditorView) {
-            this.decorationSet = buildSet(view.state.field(f));
+            this.decorationSet = buildSet(
+              view.state.field(f),
+              options?.examplePluralNum
+            );
           }
           update(change: ViewUpdate) {
-            this.decorationSet = buildSet(change.state.field(f));
+            this.decorationSet = buildSet(
+              change.state.field(f),
+              options?.examplePluralNum
+            );
           }
         },
         {

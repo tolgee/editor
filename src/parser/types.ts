@@ -13,5 +13,5 @@ export type Placeholder = {
 
 export type TolgeeFormat = {
   parameter: string;
-  variants: Map<string, string>;
+  variants: Record<string, string | undefined>;
 };

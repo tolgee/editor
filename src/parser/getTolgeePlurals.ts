@@ -41,7 +41,7 @@ export const getTolgeePlurals = (input: string): TolgeeFormat | null => {
   const cursor = tree.cursor();
 
   const nodes: Record<number, SyntaxNode> = {};
-  const variants = new Map<string, string>();
+  const variants: Record<string, string | undefined> = {};
 
   const requiredIndexes = Object.keys(REQUIRED_NODES);
   const lastIndex = Number(requiredIndexes[requiredIndexes.length - 1]);
@@ -82,11 +82,11 @@ export const getTolgeePlurals = (input: string): TolgeeFormat | null => {
   do {
     const variantName = getNodeText(variant.firstChild!, input);
     const variantContent = getVariantContent(variant, input);
-    if (variants.get(variantName)) {
+    if (variants[variantName] !== undefined) {
       // two variants with the same name
       return null;
     }
-    variants.set(variantName, variantContent);
+    variants[variantName] = variantContent;
   } while ((variant = variant.nextSibling));
 
   return {
