@@ -28,7 +28,7 @@ export const EditorMulti = ({
           <div>{variantName}</div>
           <Editor
             key={variantName}
-            initialValue={value.variants.get(variantName) || ""}
+            initialValue={value.variants[variantName] || ""}
             placeholders={placeholders}
             allowedNewPlaceholders={allowedNewPlaceholders}
           />
