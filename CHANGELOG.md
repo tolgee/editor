@@ -1,3 +1,18 @@
+# [1.5.0](https://github.com/tolgee/editor/compare/v1.4.0...v1.5.0) (2024-02-05)
+
+
+### Bug Fixes
+
+* small improvements ([8fdadc7](https://github.com/tolgee/editor/commit/8fdadc7d8e8e858928beaaee9c3e1d65f74f2e31))
+* small improvements ([c77c218](https://github.com/tolgee/editor/commit/c77c21849b03f106481b7be531dca2fdfbd3e93a))
+
+
+### Features
+
+* improve escaping ([d8c0b10](https://github.com/tolgee/editor/commit/d8c0b108c661c56d2244d37ff443ee58d6143d8b))
+* improve placeholders ([d54af63](https://github.com/tolgee/editor/commit/d54af6375a3ab19e80f807a83e9a452de62db42d))
+* improve placeholders ([c4652e6](https://github.com/tolgee/editor/commit/c4652e60a5091a3cbaf8077bc8e5d96081a0f9db))
+
 # [1.4.0](https://github.com/tolgee/editor/compare/v1.3.0...v1.4.0) (2024-01-31)
 
 
