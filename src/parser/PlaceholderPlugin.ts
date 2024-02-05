@@ -55,8 +55,8 @@ function buildPlaceholders(
 
   return placeholders.filter((value) => {
     if (modifiedRange) {
-      const [from, to] = modifiedRange;
-      if (from < value.position.end && to > value.position.start) {
+      const [from] = modifiedRange;
+      if (from > value.position.start && from < value.position.end) {
         return false;
       }
     }

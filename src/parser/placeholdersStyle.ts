@@ -61,6 +61,7 @@ export const generatePlaceholdersStyle = ({
       font-size: 14px;
       user-select: none;
       margin: 0px 1px;
+      overflow: hidden;
 
       & > * {
         display: grid;
