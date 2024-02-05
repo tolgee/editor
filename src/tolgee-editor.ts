@@ -6,4 +6,5 @@ export { getTolgeePlurals } from "./parser/getTolgeePlurals";
 export { tolgeeHighlight } from "./parser/tolgeeHighlight";
 export { htmlIsolatesPlugin } from "./parser/htmlIsolatesPlugin";
 export { generatePlaceholdersStyle } from "./parser/placeholdersStyle";
+export { tolgeeFormatGenerateIcu } from "./parser/tolgeeFormatGenerateIcu";
 export * from "./parser/types";

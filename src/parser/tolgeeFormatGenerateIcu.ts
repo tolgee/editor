@@ -14,13 +14,19 @@ export const tolgeeFormatGenerateIcu = (format: TolgeeFormat) => {
   }
 
   const result: string[] = [`{${parameter}, plural,`];
-  for (const [variant, content] of variants.entries()) {
+
+  if (!variants["other"]) {
+    // make sure "other" variant is present
+    variants.other = "";
+  }
+
+  for (const [variant, content] of Object.entries(variants)) {
     try {
       parse(`{${parameter}, plural, other {${content}}}`);
       result.push(` ${variant} {${content}}`);
     } catch (e) {
       // if the variant is invalid, escape it
-      result.push(` ${variant} {${escapeIcuVariant(content)}}`);
+      result.push(` ${variant} {${escapeIcuVariant(content || "")}}`);
     }
   }
   result.push("}");
