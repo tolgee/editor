@@ -1,3 +1,10 @@
+# [1.6.0](https://github.com/tolgee/editor/compare/v1.5.0...v1.6.0) (2024-02-06)
+
+
+### Features
+
+* make placeholders smaller ([8169d11](https://github.com/tolgee/editor/commit/8169d119c6c04042018d42a0029453e02bdbab9c))
+
 # [1.5.0](https://github.com/tolgee/editor/compare/v1.4.0...v1.5.0) (2024-02-05)
 
 
