@@ -1,16 +1,20 @@
 import { tags } from "@lezer/highlight";
 import { HighlightStyle, syntaxHighlighting } from "@codemirror/language";
 
-const VARIABLE_COLOR = "#008371";
-const TAG_COLOR = "#822343";
+export type EditorColors = {
+  function: string;
+  main: string;
+  other: string;
+};
 
-export const tolgeeHighlight = syntaxHighlighting(
-  HighlightStyle.define([
-    { tag: tags.variableName, color: VARIABLE_COLOR },
-    { tag: tags.keyword, color: VARIABLE_COLOR },
-    { tag: tags.paren, color: VARIABLE_COLOR },
-    { tag: tags.separator, color: VARIABLE_COLOR },
-    { tag: tags.bracket, color: VARIABLE_COLOR },
-    { tag: tags.tagName, color: TAG_COLOR },
-  ])
-);
+export const TolgeeHighlight = (colors: EditorColors) =>
+  syntaxHighlighting(
+    HighlightStyle.define([
+      { tag: tags.variableName, color: colors.other },
+      { tag: tags.keyword, color: colors.function },
+      { tag: tags.bracket, color: colors.other },
+      { tag: tags.tagName, color: colors.other },
+      { tag: tags.content, color: colors.main },
+      { tag: tags.string, color: colors.main },
+    ])
+  );

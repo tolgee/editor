@@ -7,7 +7,7 @@ import { tolgeeLinter } from "../playground/tolgeeLinter";
 import { PlaceholderPlugin } from "../parser/PlaceholderPlugin";
 import styled from "@emotion/styled";
 import { Placeholder } from "../parser/types";
-import { tolgeeHighlight } from "../parser/tolgeeHighlight";
+import { TolgeeHighlight } from "../parser/tolgeeHighlight";
 import { generatePlaceholdersStyle } from "../parser/placeholdersStyle";
 
 const StyledEditor = styled("div")`
@@ -68,7 +68,11 @@ export const Editor: React.FC<Props> = ({
           languageCompartment.of(tolgeeSyntax()),
           tolgeeLinter,
           compartment.current.of([]),
-          tolgeeHighlight,
+          TolgeeHighlight({
+            function: "#007300",
+            other: "#002bff",
+            main: "#2C3C52",
+          }),
         ],
       }),
     });
