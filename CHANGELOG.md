@@ -1,3 +1,12 @@
+# [1.7.0](https://github.com/tolgee/editor/compare/v1.6.0...v1.7.0) (2024-02-09)
+
+
+### Features
+
+* local link to tolgee ([02303dd](https://github.com/tolgee/editor/commit/02303dd65e17ec0c4d8c6493196222b70e992bc2))
+* local link to tolgee ([9f56151](https://github.com/tolgee/editor/commit/9f561512436222c461f44ef51253e60e2b53bc3f))
+* support custom colors in the editor ([c7c7494](https://github.com/tolgee/editor/commit/c7c7494da0c0bf709076fc3016199a1cb6a62f51))
+
 # [1.6.0](https://github.com/tolgee/editor/compare/v1.5.0...v1.6.0) (2024-02-06)
 
 
