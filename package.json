@@ -13,7 +13,8 @@
     "grammar": "lezer-generator ./src/parser/tolgee.grammar -o ./src/parser/tolgeeParser.ts",
     "preview": "vite preview",
     "test": "jest",
-    "release": "semantic-release"
+    "release": "semantic-release",
+    "link": "node -r dotenv/config ./scripts/linkToTolgee.js"
   },
   "files": [
     "lib/**/*",
@@ -48,6 +49,7 @@
     "@uiw/react-codemirror": "^4.21.21",
     "@vitejs/plugin-react": "^4.2.1",
     "concurrently": "^8.2.2",
+    "dotenv": "^16.4.1",
     "eslint": "^8.55.0",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.5",
