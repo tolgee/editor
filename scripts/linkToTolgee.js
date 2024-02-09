@@ -5,9 +5,6 @@ import { join, relative, resolve } from "path";
 // use `npm run build:watch` for development
 
 // eslint-disable-next-line no-undef
-console.log(process.env. TOLGEE_DIR)
-
-// eslint-disable-next-line no-undef
 const TOLGEE_PATH = process.env.TOLGEE_DIR || "../server";
 
 {
