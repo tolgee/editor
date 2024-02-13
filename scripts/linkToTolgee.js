@@ -18,11 +18,22 @@ const TOLGEE_PATH = process.env.TOLGEE_DIR || "../server";
   console.log('linked', resolve(location), '->', resolve(target))
 }
 
+// link shared codemirror packages, to avoid duplicate classes
 {
-  // link webapp to this package
   const target = join(TOLGEE_PATH, "webapp/node_modules/@codemirror/state");
   const locationDir = join(".", "node_modules/@codemirror");
   const location = join(locationDir, "state");
+
+  rmSync(location, { recursive: true, force: true });
+  symlinkSync(relative(locationDir, target), location);
+  console.log('linked', resolve(location), '->', resolve(target))
+}
+
+// link shared codemirror packages, to avoid duplicate classes
+{
+  const target = join(TOLGEE_PATH, "webapp/node_modules/@codemirror/view");
+  const locationDir = join(".", "node_modules/@codemirror");
+  const location = join(locationDir, "view");
 
   rmSync(location, { recursive: true, force: true });
   symlinkSync(relative(locationDir, target), location);
