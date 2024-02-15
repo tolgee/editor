@@ -9,6 +9,11 @@ function parse(input: string) {
 
 export const tolgeeFormatGenerateIcu = (format: TolgeeFormat) => {
   const { parameter, variants } = format;
+
+  if (!parameter) {
+    return variants.other ?? "";
+  }
+
   if (!checkParamNameIsValid(parameter)) {
     throw new Error(`Parameter name "${parameter}" is invalid`);
   }

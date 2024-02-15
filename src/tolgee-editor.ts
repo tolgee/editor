@@ -7,4 +7,5 @@ export { TolgeeHighlight } from "./parser/tolgeeHighlight";
 export { htmlIsolatesPlugin } from "./parser/htmlIsolatesPlugin";
 export { generatePlaceholdersStyle } from "./parser/placeholdersStyle";
 export { tolgeeFormatGenerateIcu } from "./parser/tolgeeFormatGenerateIcu";
+export { checkParamNameIsValid } from "./parser/checkParamNameIsValid";
 export * from "./parser/types";
