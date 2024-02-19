@@ -5,12 +5,12 @@ import { join, relative, resolve } from "path";
 // use `npm run build:watch` for development
 
 // eslint-disable-next-line no-undef
-const TOLGEE_PATH = process.env.TOLGEE_DIR || "../server";
+const TOLGEE_PATH = process.env.TOLGEE_DIR || "../server/webapp";
 
 {
   // link webapp to this package
   const target = ".";
-  const locationDir = join(TOLGEE_PATH, "webapp/node_modules/@tginternal");
+  const locationDir = join(TOLGEE_PATH, "node_modules/@tginternal");
   const location = join(locationDir, "editor");
 
   rmSync(location, { recursive: true, force: true });
@@ -20,7 +20,7 @@ const TOLGEE_PATH = process.env.TOLGEE_DIR || "../server";
 
 // link shared codemirror packages, to avoid duplicate classes
 {
-  const target = join(TOLGEE_PATH, "webapp/node_modules/@codemirror/state");
+  const target = join(TOLGEE_PATH, "node_modules/@codemirror/state");
   const locationDir = join(".", "node_modules/@codemirror");
   const location = join(locationDir, "state");
 
@@ -31,7 +31,7 @@ const TOLGEE_PATH = process.env.TOLGEE_DIR || "../server";
 
 // link shared codemirror packages, to avoid duplicate classes
 {
-  const target = join(TOLGEE_PATH, "webapp/node_modules/@codemirror/view");
+  const target = join(TOLGEE_PATH, "node_modules/@codemirror/view");
   const locationDir = join(".", "node_modules/@codemirror");
   const location = join(locationDir, "view");
 

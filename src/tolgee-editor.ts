@@ -8,4 +8,6 @@ export { htmlIsolatesPlugin } from "./parser/htmlIsolatesPlugin";
 export { generatePlaceholdersStyle } from "./parser/placeholdersStyle";
 export { tolgeeFormatGenerateIcu } from "./parser/tolgeeFormatGenerateIcu";
 export { checkParamNameIsValid } from "./parser/checkParamNameIsValid";
+export { getPluralVariants, getVariantExample } from "./utils/pluralTools";
+export { getLanguageDirection } from "./utils/getLanguageDirection";
 export * from "./parser/types";
