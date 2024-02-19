@@ -1,3 +1,15 @@
+# [1.8.0](https://github.com/tolgee/editor/compare/v1.7.0...v1.8.0) (2024-02-19)
+
+
+### Bug Fixes
+
+* placeholder style ([13c2262](https://github.com/tolgee/editor/commit/13c226226eb7c3cbea3baef016b1594727d3e7c6))
+
+
+### Features
+
+* update tolgee format and export parameter check function ([06985ac](https://github.com/tolgee/editor/commit/06985acfa28e83876e3536670eefcfffb433727e))
+
 # [1.7.0](https://github.com/tolgee/editor/compare/v1.6.0...v1.7.0) (2024-02-09)
 
 
