@@ -1,3 +1,10 @@
+# [1.9.0](https://github.com/tolgee/editor/compare/v1.8.0...v1.9.0) (2024-02-19)
+
+
+### Features
+
+* add common tools ([f7cb6ec](https://github.com/tolgee/editor/commit/f7cb6ec733f50483bfd10bb13ef10f59c8b57dd2))
+
 # [1.8.0](https://github.com/tolgee/editor/compare/v1.7.0...v1.8.0) (2024-02-19)
 
 
