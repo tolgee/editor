@@ -31,12 +31,16 @@ function getVariantContent(variantNode: SyntaxNode, input: string) {
   return "";
 }
 
-export const getTolgeePlurals = (input: string): TolgeeFormat | null => {
+function returnNoPlural(value: string): TolgeeFormat {
+  return { variants: { other: value } };
+}
+
+export const getTolgeePlurals = (input: string): TolgeeFormat => {
   let tree: Tree;
   try {
     tree = parser.configure({ strict: true }).parse(input);
   } catch (e) {
-    return null;
+    return returnNoPlural(input);
   }
   const cursor = tree.cursor();
 
@@ -59,20 +63,20 @@ export const getTolgeePlurals = (input: string): TolgeeFormat | null => {
     if (required === node.type.id) {
       nodes[node.type.id] = node;
     } else {
-      return null;
+      return returnNoPlural(input);
     }
   }
 
   // {variable, plural, one {...} two {...} other {...} }...
   //                                                     ^ nothing should be here
   if (nodes[Expression].nextSibling) {
-    return null;
+    return returnNoPlural(input);
   }
 
   // {variable, plural, one {...} two {...} other {...} }
   //            ^^^^^^
   if (getNodeText(nodes[SelectFunction], input) !== "plural") {
-    return null;
+    return returnNoPlural(input);
   }
 
   // collect all the top level plural variants
@@ -84,7 +88,7 @@ export const getTolgeePlurals = (input: string): TolgeeFormat | null => {
     const variantContent = getVariantContent(variant, input);
     if (variants[variantName] !== undefined) {
       // two variants with the same name
-      return null;
+      return returnNoPlural(input);
     }
     variants[variantName] = variantContent;
   } while ((variant = variant.nextSibling));

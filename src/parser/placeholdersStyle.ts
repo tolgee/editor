@@ -51,7 +51,6 @@ export const generatePlaceholdersStyle = ({
       vertical-align: text-top;
       align-items: center;
       justify-content: center;
-      height: 18px;
       min-width: 15px;
       border: 1px solid ${colors.variable.border};
       background-color: ${colors.variable.background};
