@@ -1,3 +1,10 @@
+# [1.10.0](https://github.com/tolgee/editor/compare/v1.9.0...v1.10.0) (2024-02-20)
+
+
+### Features
+
+* adapt to plural backend ([e5d3c99](https://github.com/tolgee/editor/commit/e5d3c9982b0e55c533d5d1b20261bf986001ee32))
+
 # [1.9.0](https://github.com/tolgee/editor/compare/v1.8.0...v1.9.0) (2024-02-19)
 
 
