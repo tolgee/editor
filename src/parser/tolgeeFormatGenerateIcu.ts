@@ -25,7 +25,11 @@ export const tolgeeFormatGenerateIcu = (format: TolgeeFormat) => {
     variants.other = "";
   }
 
+  let allVariantsEmpty = true;
   for (const [variant, content] of Object.entries(variants)) {
+    if (allVariantsEmpty && content) {
+      allVariantsEmpty = false;
+    }
     try {
       parse(`{${parameter}, plural, other {${content}}}`);
       result.push(` ${variant} {${content}}`);
@@ -34,6 +38,11 @@ export const tolgeeFormatGenerateIcu = (format: TolgeeFormat) => {
       result.push(` ${variant} {${escapeIcuVariant(content || "")}}`);
     }
   }
+
+  if (allVariantsEmpty) {
+    return "";
+  }
+
   result.push("}");
   return result.join("");
 };
