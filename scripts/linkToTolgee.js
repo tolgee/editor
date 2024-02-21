@@ -10,8 +10,8 @@ const TOLGEE_PATH = process.env.TOLGEE_DIR || "../server/webapp";
 {
   // link webapp to this package
   const target = ".";
-  const locationDir = join(TOLGEE_PATH, "node_modules/@tginternal");
-  const location = join(locationDir, "editor");
+  const location = join(TOLGEE_PATH, "node_modules/@tginternal/editor");
+  const locationDir = join(location, "..");
 
   rmSync(location, { recursive: true, force: true });
   symlinkSync(relative(locationDir, target), location);
@@ -19,23 +19,18 @@ const TOLGEE_PATH = process.env.TOLGEE_DIR || "../server/webapp";
 }
 
 // link shared codemirror packages, to avoid duplicate classes
-{
-  const target = join(TOLGEE_PATH, "node_modules/@codemirror/state");
-  const locationDir = join(".", "node_modules/@codemirror");
-  const location = join(locationDir, "state");
-
+function backLink(packageName) {
+  const target = join(TOLGEE_PATH, "node_modules", packageName);
+  const location = join(".", "node_modules", packageName);
+  const locationDir = join(location, "..");
+  
   rmSync(location, { recursive: true, force: true });
   symlinkSync(relative(locationDir, target), location);
   console.log('linked', resolve(location), '->', resolve(target))
 }
 
-// link shared codemirror packages, to avoid duplicate classes
-{
-  const target = join(TOLGEE_PATH, "node_modules/@codemirror/view");
-  const locationDir = join(".", "node_modules/@codemirror");
-  const location = join(locationDir, "view");
-
-  rmSync(location, { recursive: true, force: true });
-  symlinkSync(relative(locationDir, target), location);
-  console.log('linked', resolve(location), '->', resolve(target))
-}
+backLink("@codemirror/state")
+backLink("@codemirror/view")
+backLink("@codemirror/language")
+backLink("@lezer/highlight")
+backLink("@lezer/lr")
