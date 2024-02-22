@@ -1,3 +1,10 @@
+## [1.10.1](https://github.com/tolgee/editor/compare/v1.10.0...v1.10.1) (2024-02-22)
+
+
+### Bug Fixes
+
+* properly handle doublequotes ([30cc71d](https://github.com/tolgee/editor/commit/30cc71d4af620daf0ad8190bedfb0d8f1f7e54cd))
+
 # [1.10.0](https://github.com/tolgee/editor/compare/v1.9.0...v1.10.0) (2024-02-20)
 
 
