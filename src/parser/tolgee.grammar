@@ -42,16 +42,18 @@ TagName { tag_name }
   escape { "'" }
   text_root { (
     (regular_char_root+) |
+    (escape escape) |
     (escape (regular_char_root | @eof)) |
     (escape escapable_root escaped_char* (escape | @eof))
   )+ }
   text { (
     (regular_char+) |
+    (escape escape) |
     (escape regular_char) |
     (escape escapable escaped_char* escape)
   )+ }
-  escapable_root { "{" | "<" | escape | plural_placeholder }
-  escapable { "{" | "}" | "<" | escape | plural_placeholder }
+  escapable_root { "{" | "<" | plural_placeholder }
+  escapable { "{" | "}" | "<" | plural_placeholder }
   regular_char_root { ![{<'#] }
   regular_char { ![{}<'#]}
   escaped_char { !['] }

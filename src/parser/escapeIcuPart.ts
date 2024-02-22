@@ -9,9 +9,9 @@ type State =
   | typeof StateEscapedMaybe
   | typeof StateImEscaping;
 
-const ESCAPABLE = new Set(["{", "<"]);
+const ESCAPABLE = new Set(["{"]);
 // these chars don't have to e escaped, but escape them if already escaping
-const INCLUDE_IN_ESCAPE = new Set([...ESCAPABLE, "}", ">"]);
+const INCLUDE_IN_ESCAPE = new Set([...ESCAPABLE, "}"]);
 const ESCAPE_CHAR = "'";
 
 export const escapeIcuVariant = (input: string) => {

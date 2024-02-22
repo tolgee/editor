@@ -130,6 +130,10 @@ describe("simple formatter", () => {
     matchIcu();
   });
 
+  test("{value, plural, other {'''{'''}}", () => {
+    matchIcu();
+  });
+
   test("Auto translated {test, plural, offset:-1, one {# translation} other {# translations}}", () => {
     expectToThrowWithIcu();
   });
