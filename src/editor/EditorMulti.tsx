@@ -27,6 +27,7 @@ export const EditorMulti = ({
         <React.Fragment key={variantName}>
           <div>{variantName}</div>
           <Editor
+            nested={true}
             key={variantName}
             initialValue={value.variants[variantName] || ""}
             placeholders={placeholders}

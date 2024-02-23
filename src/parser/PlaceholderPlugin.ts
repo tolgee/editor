@@ -45,9 +45,10 @@ class PlaceholderWidget extends WidgetType {
 
 function buildPlaceholders(
   text: string,
-  modifiedRange: [from: number, to: number] | undefined
+  modifiedRange: [from: number, to: number] | undefined,
+  nested: boolean
 ) {
-  const placeholders = getPlaceholders(text);
+  const placeholders = getPlaceholders(text, nested);
 
   if (placeholders === null) {
     return null;
@@ -148,14 +149,15 @@ export type Options = {
   noUpdates?: boolean;
   allowedNewPlaceholders?: Partial<Placeholder>[];
   examplePluralNum?: number;
+  nested: boolean;
 };
 
-export const PlaceholderPlugin = (options?: Options) => {
-  const { noUpdates, allowedNewPlaceholders } = options || {};
+export const PlaceholderPlugin = (options: Options) => {
+  const { noUpdates, allowedNewPlaceholders, nested } = options;
   return StateField.define<Placeholder[]>({
     create(state) {
       try {
-        return buildPlaceholders(state.doc.toString(), undefined) || [];
+        return buildPlaceholders(state.doc.toString(), undefined, nested) || [];
       } catch (e) {
         return [];
       }
@@ -178,7 +180,8 @@ export const PlaceholderPlugin = (options?: Options) => {
         });
         const newPlaceholders = buildPlaceholders(
           change.state.doc.toString(),
-          modifiedRange
+          modifiedRange,
+          nested
         );
         if (newPlaceholders === null) {
           return shiftByChanges(value, change.changes);
