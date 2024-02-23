@@ -18,7 +18,7 @@ describe("get tolgee plurals", () => {
   });
 
   it("variant with escaped inside", () => {
-    shouldBePlural("{variable, plural, one {'{'}} other {}");
+    shouldBePlural("{variable, plural, one {'{'} other {}}");
   });
 
   it(`{value, plural,
