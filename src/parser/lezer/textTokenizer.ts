@@ -1,19 +1,40 @@
 import { fromCodePoint } from "@codemirror/state";
 import {
+  Dialect_tags,
   HtmlTagClose,
-  HtmlTagCloseRoot,
+  HtmlTagCloseNested,
   HtmlTagOpen,
-  HtmlTagOpenRoot,
+  HtmlTagOpenNested,
   Text,
-  TextRoot,
+  TextNested,
 } from "./tolgeeParser.terms";
-import { ExternalTokenizer, InputStream } from "@lezer/lr";
+import { ExternalTokenizer, InputStream, Stack } from "@lezer/lr";
 import { isTagNameChar, isWhiteSpace } from "./helpers";
 
-const ESCAPABLE_ROOT = new Set(["{", "}", "<", ">"]);
-const ESCAPABLE_NESTED = new Set(["{", "}", "<", ">", "#"]);
-const ENDING_ROOT = new Set(["{", "<"]);
-const ENDING_NESTED = new Set(["{", "}", "<", "#"]);
+function getEscapable(isNested: boolean, tags: boolean) {
+  const result = new Set(["{", "}"]);
+  if (isNested) {
+    result.add("#");
+  }
+  if (tags) {
+    result.add("<");
+    result.add(">");
+  }
+  return result;
+}
+
+function getEnding(isNested: boolean, tags: boolean) {
+  const result = new Set(["{"]);
+  if (isNested) {
+    result.add("#");
+    result.add("}");
+  }
+  if (tags) {
+    result.add("<");
+  }
+  return result;
+}
+
 const ESCAPE_CHAR = "'";
 
 function matchText(
@@ -152,6 +173,7 @@ function matchTag(
 
 type MatchTokenProps = {
   input: InputStream;
+  stack: Stack;
   escapable: Set<string>;
   ending: Set<string>;
   textToken: number;
@@ -161,6 +183,7 @@ type MatchTokenProps = {
 
 function matchToken({
   input,
+  stack,
   escapable,
   ending,
   textToken,
@@ -168,31 +191,36 @@ function matchToken({
   closeTag,
 }: MatchTokenProps) {
   const char = fromCodePoint(input.next);
-  if (char === "<") {
+  const tags = stack.dialectEnabled(Dialect_tags);
+  if (char === "<" && tags) {
     return matchTag(input, textToken, openTag, closeTag);
   } else {
     return matchText(input, escapable, ending, textToken);
   }
 }
 
-export const textRoot = new ExternalTokenizer((input) => {
+export const text = new ExternalTokenizer((input, stack) => {
+  const tags = stack.dialectEnabled(Dialect_tags);
   return matchToken({
     input,
-    escapable: ESCAPABLE_ROOT,
-    ending: ENDING_ROOT,
-    textToken: TextRoot,
-    openTag: HtmlTagOpenRoot,
-    closeTag: HtmlTagCloseRoot,
-  });
-});
-
-export const text = new ExternalTokenizer((input) => {
-  return matchToken({
-    input,
-    escapable: ESCAPABLE_NESTED,
-    ending: ENDING_NESTED,
+    stack,
+    escapable: getEscapable(false, tags),
+    ending: getEnding(false, tags),
     textToken: Text,
     openTag: HtmlTagOpen,
     closeTag: HtmlTagClose,
+  });
+});
+
+export const textNested = new ExternalTokenizer((input, stack) => {
+  const tags = stack.dialectEnabled(Dialect_tags);
+  return matchToken({
+    input,
+    stack,
+    escapable: getEscapable(true, tags),
+    ending: getEnding(true, tags),
+    textToken: TextNested,
+    openTag: HtmlTagOpenNested,
+    closeTag: HtmlTagCloseNested,
   });
 });

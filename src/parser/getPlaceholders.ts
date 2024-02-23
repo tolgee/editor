@@ -5,9 +5,9 @@ import {
   FormatFunction,
   FormatStyle,
   HtmlTag,
+  HtmlTagNested,
   HtmlTagOpen,
-  HtmlTagOpenRoot,
-  HtmlTagRoot,
+  HtmlTagOpenNested,
   Param,
   PluralPlaceholder,
 } from "./lezer/tolgeeParser.terms";
@@ -30,7 +30,11 @@ export const getPlaceholders = (input: string, nested?: boolean) => {
   let tree: Tree;
   try {
     tree = parser
-      .configure({ strict: true, top: nested ? "Nested" : "Root" })
+      .configure({
+        strict: true,
+        top: nested ? "Nested" : "Root",
+        dialect: "tags",
+      })
       .parse(input);
   } catch (e) {
     return null;
@@ -85,7 +89,7 @@ export const getPlaceholders = (input: string, nested?: boolean) => {
 
   function placeholderFromTag(htmlTag: SyntaxNode) {
     const innerNode = htmlTag.firstChild!;
-    const isOpen = [HtmlTagOpen, HtmlTagOpenRoot].includes(innerNode.type.id);
+    const isOpen = [HtmlTagOpen, HtmlTagOpenNested].includes(innerNode.type.id);
     const text = getNodeText(innerNode);
 
     const name = text.substring(isOpen ? 1 : 2, text.length - 1).trim();
@@ -142,7 +146,7 @@ export const getPlaceholders = (input: string, nested?: boolean) => {
         break;
       }
 
-      case HtmlTagRoot:
+      case HtmlTagNested:
       case HtmlTag:
         addPlaceholder(placeholderFromTag(node));
         enter = false;

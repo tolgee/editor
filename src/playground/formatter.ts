@@ -7,7 +7,7 @@ import {
   FormatExpression,
   PluralPlaceholder,
   Text,
-  TextRoot,
+  TextNested,
   VariantDescriptor,
   FormatStyle,
   FormatFunction,
@@ -96,8 +96,8 @@ export function formatter(
     const context = contextStack[contextStack.length - 1];
 
     switch (cursor.type.id) {
-      case TextRoot:
       case Text:
+      case TextNested:
         if (context.activeVariant) {
           pushText(removeEscape(text));
         } else {

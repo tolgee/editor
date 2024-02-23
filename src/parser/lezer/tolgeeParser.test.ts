@@ -9,7 +9,7 @@ function icu(text: string, ignoreTag = true) {
 }
 
 function tolgee(text: string) {
-  return parser.configure({ strict: true }).parse(text);
+  return parser.configure({ strict: true, dialect: "tags" }).parse(text);
 }
 
 function getText() {

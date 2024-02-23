@@ -46,4 +46,18 @@ describe("escape icu part", () => {
       "this is ''' actually #' escaped"
     );
   });
+
+  it("takes hash as escape character", () => {
+    expect(escapeIcuVariant("should be '# }' escaped")).toEqual(
+      "should be '# }' escaped"
+    );
+  });
+
+  it("escapes dangling escape at the end", () => {
+    expect(escapeIcuVariant("test '")).toEqual("test ''");
+  });
+
+  it("doesn't take tags escapes into consideration", () => {
+    expect(escapeIcuVariant("'<'")).toEqual("'<''");
+  });
 });

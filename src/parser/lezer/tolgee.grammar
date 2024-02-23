@@ -1,8 +1,10 @@
-@top Root { contentRoot? }
-@top Nested { content? }
+@top Root { content? }
+@top Nested { contentNested? }
 
-contentRoot { (TextRoot | Expression | PluralPlaceholder | HtmlTagRoot) contentRoot? }
+@dialects { tags }
+
 content { (Text | Expression | PluralPlaceholder | HtmlTag) content? }
+contentNested { (TextNested | Expression | PluralPlaceholder | HtmlTagNested) contentNested? }
 
 Expression { ExpressionOpen (FormatExpression | SelectExpression) ExpressionClose }
 
@@ -10,7 +12,7 @@ Expression { ExpressionOpen (FormatExpression | SelectExpression) ExpressionClos
 FormatExpression { space? Param space? (sep space? FormatFunction space? (sep (space? FormatStyle)+ space?)?)? }
 SelectExpression { space? Param space? sep space? SelectFunction space? sep (space? Offset)? (space? SelectVariant)+ space? }
 SelectVariant { VariantDescriptor space? "{" VariantContent "}" }
-VariantContent { content? }
+VariantContent { contentNested? }
 
 Offset { offset_definition }
 SelectFunction { select_function }
@@ -22,15 +24,9 @@ PluralPlaceholder { plural_placeholder }
 FormatFunction { format_function }
 FormatStyle { format_style }
 
-HtmlTagRoot { HtmlTagOpenRoot | HtmlTagCloseRoot }
 HtmlTag { HtmlTagOpen | HtmlTagClose }
+HtmlTagNested { HtmlTagOpenNested | HtmlTagCloseNested }
 
-
-@external tokens textRoot from "./textTokenizer" { 
-  TextRoot,
-  HtmlTagOpenRoot,
-  HtmlTagCloseRoot
-}
 
 @external tokens text from "./textTokenizer" { 
   Text,
@@ -38,11 +34,15 @@ HtmlTag { HtmlTagOpen | HtmlTagClose }
   HtmlTagClose
 }
 
+@external tokens textNested from "./textTokenizer" { 
+  TextNested,
+  HtmlTagOpenNested,
+  HtmlTagCloseNested
+}
+
 @tokens {
   "{"
   "}"
-  "<"
-  ">"
   sep { "," }
   offset_definition { "offset:" $[+-]? $[0-9]+ }
   plural_placeholder { '#' }

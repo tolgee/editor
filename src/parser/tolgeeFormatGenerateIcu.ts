@@ -1,10 +1,10 @@
 import { checkParamNameIsValid } from "./checkParamNameIsValid";
 import { escapeIcuVariant } from "./escapeIcuPart";
-import { parser } from "./lezer/tolgeeParser";
+import { parse } from "@formatjs/icu-messageformat-parser";
 import { TolgeeFormat } from "./types";
 
-function parse(input: string) {
-  return parser.configure({ strict: true }).parse(input);
+function parseIcu(input: string) {
+  return parse(input, { ignoreTag: true });
 }
 
 export const tolgeeFormatGenerateIcu = (format: TolgeeFormat) => {
@@ -31,7 +31,7 @@ export const tolgeeFormatGenerateIcu = (format: TolgeeFormat) => {
       allVariantsEmpty = false;
     }
     try {
-      parse(`{${parameter}, plural, other {${content}}}`);
+      parseIcu(`{${parameter}, plural, other {${content}}}`);
       result.push(` ${variant} {${content}}`);
     } catch (e) {
       // if the variant is invalid, escape it
