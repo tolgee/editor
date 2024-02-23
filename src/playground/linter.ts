@@ -1,5 +1,5 @@
 import { linter } from "@codemirror/lint";
-import { parser } from "../parser/tolgeeParser";
+import { parser } from "../parser/lezer/tolgeeParser";
 
 export function simpleLezerLinter() {
   return linter((view) => {

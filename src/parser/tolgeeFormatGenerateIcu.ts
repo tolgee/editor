@@ -1,6 +1,6 @@
 import { checkParamNameIsValid } from "./checkParamNameIsValid";
 import { escapeIcuVariant } from "./escapeIcuPart";
-import { parser } from "./tolgeeParser";
+import { parser } from "./lezer/tolgeeParser";
 import { TolgeeFormat } from "./types";
 
 function parse(input: string) {

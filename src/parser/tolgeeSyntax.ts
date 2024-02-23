@@ -1,4 +1,4 @@
-import { parser } from "./tolgeeParser";
+import { parser } from "./lezer/tolgeeParser";
 import { LRLanguage, LanguageSupport } from "@codemirror/language";
 import { styleTags, tags as t } from "@lezer/highlight";
 

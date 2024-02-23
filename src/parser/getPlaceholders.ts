@@ -1,4 +1,4 @@
-import { parser } from "./tolgeeParser";
+import { parser } from "./lezer/tolgeeParser";
 import {
   Expression,
   FormatExpression,
@@ -8,8 +8,7 @@ import {
   HtmlTagOpen,
   Param,
   PluralPlaceholder,
-  TagName,
-} from "./tolgeeParser.terms";
+} from "./lezer/tolgeeParser.terms";
 
 import type { SyntaxNode, Tree } from "@lezer/common";
 import { Placeholder } from "./types";
@@ -25,10 +24,12 @@ function getAllChildren(node: SyntaxNode) {
   return result;
 }
 
-export const getPlaceholders = (input: string) => {
+export const getPlaceholders = (input: string, nested?: boolean) => {
   let tree: Tree;
   try {
-    tree = parser.configure({ strict: true }).parse(input);
+    tree = parser
+      .configure({ strict: true, top: nested ? "Nested" : "Root" })
+      .parse(input);
   } catch (e) {
     return null;
   }
@@ -82,12 +83,11 @@ export const getPlaceholders = (input: string) => {
 
   function placeholderFromTag(htmlTag: SyntaxNode) {
     const innerNode = htmlTag.firstChild!;
-    const nameNode = getAllChildren(innerNode).find(
-      (node) => node.type.id === TagName
-    )!;
-
     const isOpen = innerNode.type.id === HtmlTagOpen;
-    const name = getNodeText(nameNode);
+    const text = getNodeText(innerNode);
+
+    const name = text.substring(isOpen ? 1 : 2, text.length - 1).trim();
+
     return {
       position: { start: innerNode.from, end: innerNode.to },
       type: isOpen ? "tagOpen" : "tagClose",
