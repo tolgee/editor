@@ -31,6 +31,7 @@ type Props = {
   onChange?: (val: string) => void;
   placeholders?: "initial" | "full" | "none";
   allowedNewPlaceholders?: Partial<Placeholder>[];
+  nested: boolean;
 };
 
 export const Editor: React.FC<Props> = ({
@@ -38,6 +39,7 @@ export const Editor: React.FC<Props> = ({
   onChange,
   placeholders,
   allowedNewPlaceholders,
+  nested,
 }) => {
   const StyledEditorWrapper = useMemo(() => {
     return generatePlaceholdersStyle({
@@ -65,7 +67,7 @@ export const Editor: React.FC<Props> = ({
             }
           }),
           EditorView.contentAttributes.of({ spellcheck: "true", lang: "en" }),
-          languageCompartment.of(tolgeeSyntax()),
+          languageCompartment.of(tolgeeSyntax(nested)),
           tolgeeLinter,
           compartment.current.of([]),
           TolgeeHighlight({
@@ -90,6 +92,7 @@ export const Editor: React.FC<Props> = ({
             PlaceholderPlugin({
               noUpdates: placeholders === "initial",
               allowedNewPlaceholders,
+              nested,
             }),
           ];
     editor.current?.dispatch({

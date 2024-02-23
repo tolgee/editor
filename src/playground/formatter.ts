@@ -1,5 +1,5 @@
 import { DefaultParamType, TranslateParams } from "@tolgee/core";
-import { parser } from "../parser/tolgeeParser";
+import { parser } from "../parser/lezer/tolgeeParser";
 import {
   ExpressionClose,
   ExpressionOpen,
@@ -7,13 +7,13 @@ import {
   FormatExpression,
   PluralPlaceholder,
   Text,
-  TextRoot,
+  TextNested,
   VariantDescriptor,
   FormatStyle,
   FormatFunction,
   SelectExpression,
   SelectVariant,
-} from "../parser/tolgeeParser.terms";
+} from "../parser/lezer/tolgeeParser.terms";
 import { updateNumberFormatOptions } from "./formatModifiers";
 
 const STATE_TEXT = 0,
@@ -96,8 +96,8 @@ export function formatter(
     const context = contextStack[contextStack.length - 1];
 
     switch (cursor.type.id) {
-      case TextRoot:
       case Text:
+      case TextNested:
         if (context.activeVariant) {
           pushText(removeEscape(text));
         } else {

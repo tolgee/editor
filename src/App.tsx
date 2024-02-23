@@ -26,6 +26,7 @@ This is <i>italic</i>.`
         />
       ) : (
         <Editor
+          nested={false}
           initialValue={value}
           onChange={setValue}
           placeholders={placeholders ? "full" : "none"}

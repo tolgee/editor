@@ -1,20 +1,20 @@
-import { parser } from "./tolgeeParser";
+import { parser } from "./lezer/tolgeeParser";
 import {
   Expression,
   Param,
   SelectFunction,
   SelectVariant,
   VariantContent,
-} from "./tolgeeParser.terms";
+} from "./lezer/tolgeeParser.terms";
 import { SyntaxNode, Tree } from "@lezer/common";
 import { TolgeeFormat } from "./types";
 
 const REQUIRED_NODES: Record<number, number | undefined> = {
   0: Expression,
   4: Param,
-  6: SelectFunction,
+  5: SelectFunction,
   // this also excludes 'offset:x'
-  8: SelectVariant,
+  6: SelectVariant,
 };
 
 function getNodeText(node: SyntaxNode, input: string) {
