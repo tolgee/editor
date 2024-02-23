@@ -21,10 +21,11 @@ describe("get tolgee plurals", () => {
     shouldBePlural("{variable, plural, one {'{'} other {}}");
   });
 
-  it(`{value, plural,
-    other {# tests}
-    one {# test}
-    }`, () => {
+  it("{value, plural, other {# tests} one {# test} }", () => {
     shouldBePlural();
+  });
+
+  it("ignores tags, when parsing plurals", () => {
+    shouldBePlural("{value, plural, other {# '< tests} one {# test} }");
   });
 });
