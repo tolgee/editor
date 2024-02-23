@@ -1,3 +1,19 @@
+# [1.11.0](https://github.com/tolgee/editor/compare/v1.10.1...v1.11.0) (2024-02-23)
+
+
+### Bug Fixes
+
+* all tests ([11e578e](https://github.com/tolgee/editor/commit/11e578e7673d514cc4cc9fe6d96b0f3b2a134cb8))
+* tolgee plurals test ([b1487dc](https://github.com/tolgee/editor/commit/b1487dc2551d9bc52559580edbc84066ae17ccdf))
+
+
+### Features
+
+* custom tokenizer ([61a941b](https://github.com/tolgee/editor/commit/61a941b059ac9ed019dcf4a88dd4c617f2405e62))
+* distinguish nested syntax ([2fa5b66](https://github.com/tolgee/editor/commit/2fa5b66d2ec88bb560fe1029e23875b508bc8d22))
+* tags as dialect ([b2c6065](https://github.com/tolgee/editor/commit/b2c60655a195aeb805c816819c57010100a9bd1a))
+* tags as dialect ([f98227d](https://github.com/tolgee/editor/commit/f98227dfeeb2e8d7ec4b6ce0855355b8d61eaea1))
+
 ## [1.10.1](https://github.com/tolgee/editor/compare/v1.10.0...v1.10.1) (2024-02-22)
 
 
