@@ -6,6 +6,8 @@ import {
   FormatStyle,
   HtmlTag,
   HtmlTagOpen,
+  HtmlTagOpenRoot,
+  HtmlTagRoot,
   Param,
   PluralPlaceholder,
 } from "./lezer/tolgeeParser.terms";
@@ -83,7 +85,7 @@ export const getPlaceholders = (input: string, nested?: boolean) => {
 
   function placeholderFromTag(htmlTag: SyntaxNode) {
     const innerNode = htmlTag.firstChild!;
-    const isOpen = innerNode.type.id === HtmlTagOpen;
+    const isOpen = [HtmlTagOpen, HtmlTagOpenRoot].includes(innerNode.type.id);
     const text = getNodeText(innerNode);
 
     const name = text.substring(isOpen ? 1 : 2, text.length - 1).trim();
@@ -140,6 +142,7 @@ export const getPlaceholders = (input: string, nested?: boolean) => {
         break;
       }
 
+      case HtmlTagRoot:
       case HtmlTag:
         addPlaceholder(placeholderFromTag(node));
         enter = false;
