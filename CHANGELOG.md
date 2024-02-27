@@ -1,3 +1,10 @@
+# [1.12.0](https://github.com/tolgee/editor/compare/v1.11.0...v1.12.0) (2024-02-27)
+
+
+### Features
+
+* support '=' in the plural parameters ([2ef5054](https://github.com/tolgee/editor/commit/2ef5054f7b8eb1c2a2b041475109da4e66dca19d))
+
 # [1.11.0](https://github.com/tolgee/editor/compare/v1.10.1...v1.11.0) (2024-02-23)
 
 
