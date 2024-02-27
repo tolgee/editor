@@ -9,7 +9,7 @@ function icu(text: string, ignoreTag = true) {
 }
 
 function tolgee(text: string) {
-  return parser.configure({ strict: true, dialect: "tags" }).parse(text);
+  return parser.configure({ strict: true }).parse(text);
 }
 
 function getText() {
@@ -21,14 +21,12 @@ function matchIcu(text = getText()) {
   expect(() => tolgee(text)).not.toThrow();
 }
 
-function matchIcuWithTags(text = getText()) {
-  expect(() => icu(text, false)).not.toThrow();
-  expect(() => tolgee(text)).not.toThrow();
+function expectToThrowWithIcu(text = getText()) {
+  expect(() => icu(text)).toThrow();
+  expect(() => tolgee(text)).toThrow();
 }
 
-function expectToThrowWithIcu() {
-  const text = getText();
-  expect(() => icu(text)).toThrow();
+function expectToThrow(text = getText()) {
   expect(() => tolgee(text)).toThrow();
 }
 
@@ -142,22 +140,13 @@ describe("simple formatter", () => {
     expectToThrowWithIcu();
   });
 
-  test("This is < invalid > tag", () => {
-    matchIcu();
+  test("Wont take tags as escapabable", () => {
+    expectToThrow("{value, plural, other {'<>'}}");
   });
 
-  test("Test <a>valid</a> tag", () => {
-    matchIcuWithTags();
-    matchIcu();
-  });
-
-  test("Test '<a>' escaped tag", () => {
-    matchIcuWithTags();
-    matchIcu();
-  });
-
-  test("tag escaping causing also more stuff to be escaped", () => {
-    matchIcuWithTags("This '<a> {} is all escaped");
-    matchIcu("This '<a> {} is all escaped");
+  test("Accepts ={number} format", () => {
+    matchIcu(
+      "Auto translated {test, plural, =1 {# translation} other {# translations}}"
+    );
   });
 });

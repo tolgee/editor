@@ -10,6 +10,7 @@ export const lezerLanguage = (nested: boolean) =>
     name: "icu-tolgee",
     parser: parser.configure({
       top: nested ? "Nested" : "Root",
+      dialect: "tags",
       props: [
         styleTags({
           TextRoot: t.string,

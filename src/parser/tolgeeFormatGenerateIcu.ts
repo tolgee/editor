@@ -1,10 +1,10 @@
 import { checkParamNameIsValid } from "./checkParamNameIsValid";
 import { escapeIcuVariant } from "./escapeIcuPart";
-import { parse } from "@formatjs/icu-messageformat-parser";
+import { parser } from "./lezer/tolgeeParser";
 import { TolgeeFormat } from "./types";
 
 function parseIcu(input: string) {
-  return parse(input, { ignoreTag: true });
+  return parser.configure({ strict: true }).parse(input);
 }
 
 export const tolgeeFormatGenerateIcu = (format: TolgeeFormat) => {
