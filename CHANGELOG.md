@@ -1,3 +1,10 @@
+## [1.12.1](https://github.com/tolgee/editor/compare/v1.12.0...v1.12.1) (2024-02-27)
+
+
+### Bug Fixes
+
+* support examples for '=' plural variants ([a69256c](https://github.com/tolgee/editor/commit/a69256ce8a2e53eb526ac8c8251a2d5c569f689d))
+
 # [1.12.0](https://github.com/tolgee/editor/compare/v1.11.0...v1.12.0) (2024-02-27)
 
 
