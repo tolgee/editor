@@ -4,6 +4,11 @@
   "type": "module",
   "main": "./dist/tolgee-editor.js",
   "types": "./lib/tolgee-editor.d.ts",
+  "exports": {
+    "require": "./dist/tolgee-editor.cjs",
+    "module": "./dist/tolgee-editor.js",
+    "types": "./lib/tolgee-editor.d.ts"
+  },
   "scripts": {
     "dev": "vite",
     "build": "tsc -p tsconfig.lib.json && vite build",
