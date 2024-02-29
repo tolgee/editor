@@ -4,7 +4,7 @@ import { TolgeeFormat } from "./types";
 export const getTolgeeFormat = (
   input: string,
   plural: boolean,
-  raw = false
+  raw: boolean
 ): TolgeeFormat => {
   if (plural) {
     return getTolgeePlurals(input || "", raw);
