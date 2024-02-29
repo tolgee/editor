@@ -5,7 +5,7 @@ function getText() {
 }
 
 function shouldBePlural(text = getText()) {
-  expect(getTolgeePlurals(text).variants.one).not.toBeUndefined();
+  expect(getTolgeePlurals(text, false).variants.one).not.toBeUndefined();
 }
 
 describe("get tolgee plurals", () => {

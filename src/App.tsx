@@ -11,7 +11,7 @@ This is <i>italic</i>.`
   const [placeholders, setPlaceholders] = useState(true);
 
   const parsedValue = useMemo(() => {
-    return getTolgeePlurals(value);
+    return getTolgeePlurals(value, false);
   }, [value]);
 
   const [plurals, setPlurals] = useState(Boolean(parsedValue));
