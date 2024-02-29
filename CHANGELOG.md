@@ -1,3 +1,15 @@
+# [1.13.0](https://github.com/tolgee/editor/compare/v1.12.1...v1.13.0) (2024-02-29)
+
+
+### Bug Fixes
+
+* typescript ([f857365](https://github.com/tolgee/editor/commit/f8573653d61257b788c9958e817cb8720050a997))
+
+
+### Features
+
+* support raw mode ([59a33e9](https://github.com/tolgee/editor/commit/59a33e97773da4f0d8947664214369f8a7ea961c))
+
 ## [1.12.1](https://github.com/tolgee/editor/compare/v1.12.0...v1.12.1) (2024-02-27)
 
 
