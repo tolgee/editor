@@ -8,6 +8,7 @@ import {
 } from "./lezer/tolgeeParser.terms";
 import { SyntaxNode, Tree } from "@lezer/common";
 import { TolgeeFormat } from "./types";
+import { unescapeIcuAll } from "./unescapeIcuAll";
 
 const REQUIRED_NODES: Record<number, number | undefined> = {
   0: Expression,
@@ -21,11 +22,19 @@ function getNodeText(node: SyntaxNode, input: string) {
   return input.substring(node.from, node.to);
 }
 
-function getVariantContent(variantNode: SyntaxNode, input: string) {
+function getVariantContent(
+  variantNode: SyntaxNode,
+  input: string,
+  raw: boolean
+) {
   let node: SyntaxNode | null | undefined = variantNode.firstChild;
   do {
     if (node?.type.id === VariantContent) {
-      return getNodeText(node, input);
+      if (raw) {
+        return unescapeIcuAll(getNodeText(node, input));
+      } else {
+        return getNodeText(node, input);
+      }
     }
   } while ((node = node?.nextSibling));
   return "";
@@ -35,7 +44,7 @@ function returnNoPlural(value: string): TolgeeFormat {
   return { variants: { other: value } };
 }
 
-export const getTolgeePlurals = (input: string): TolgeeFormat => {
+export const getTolgeePlurals = (input: string, raw: boolean): TolgeeFormat => {
   let tree: Tree;
   try {
     tree = parser.configure({ strict: true }).parse(input);
@@ -85,7 +94,7 @@ export const getTolgeePlurals = (input: string): TolgeeFormat => {
   let variant: SyntaxNode | null = nodes[SelectVariant];
   do {
     const variantName = getNodeText(variant.firstChild!, input);
-    const variantContent = getVariantContent(variant, input);
+    const variantContent = getVariantContent(variant, input, raw);
     if (variants[variantName] !== undefined) {
       // two variants with the same name
       return returnNoPlural(input);

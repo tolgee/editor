@@ -7,6 +7,7 @@ export { htmlIsolatesPlugin } from "./parser/htmlIsolatesPlugin";
 export { generatePlaceholdersStyle } from "./parser/placeholdersStyle";
 export { tolgeeFormatGenerateIcu } from "./parser/tolgeeFormatGenerateIcu";
 export { checkParamNameIsValid } from "./parser/checkParamNameIsValid";
+export { getTolgeePlurals } from "./parser/getTolgeePlurals";
 export { getTolgeeFormat } from "./parser/getTolgeeFormat";
 export { getPluralVariants, getVariantExample } from "./utils/pluralTools";
 export { getLanguageDirection } from "./utils/getLanguageDirection";

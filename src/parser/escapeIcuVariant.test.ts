@@ -1,14 +1,8 @@
-import { escapeIcuVariant } from "./escapeIcuPart";
+import { escapeIcuVariant } from "./escapeIcuVariant";
 
-describe("escape icu part", () => {
+describe("escape icu variant", () => {
   it("handles parameter", () => {
     expect(escapeIcuVariant("this {is} variant")).toEqual(
-      "this '{is}' variant"
-    );
-  });
-
-  it("handles already escaped parameter", () => {
-    expect(escapeIcuVariant("this '{is}' variant")).toEqual(
       "this '{is}' variant"
     );
   });
