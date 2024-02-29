@@ -1,3 +1,10 @@
+## [1.13.1](https://github.com/tolgee/editor/compare/v1.13.0...v1.13.1) (2024-02-29)
+
+
+### Bug Fixes
+
+* raw parameter mandatory ([17dd465](https://github.com/tolgee/editor/commit/17dd4659440c0c06bb29146ae314c257d9384aaf))
+
 # [1.13.0](https://github.com/tolgee/editor/compare/v1.12.1...v1.13.0) (2024-02-29)
 
 
