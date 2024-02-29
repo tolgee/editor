@@ -1,3 +1,10 @@
+## [1.13.2](https://github.com/tolgee/editor/compare/v1.13.1...v1.13.2) (2024-02-29)
+
+
+### Bug Fixes
+
+* support cjs ([c48f009](https://github.com/tolgee/editor/commit/c48f009d95f3680d38660f49835604272a125b86))
+
 ## [1.13.1](https://github.com/tolgee/editor/compare/v1.13.0...v1.13.1) (2024-02-29)
 
 

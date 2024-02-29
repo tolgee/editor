@@ -1,6 +1,6 @@
 {
   "name": "@tginternal/editor",
-  "version": "1.13.1",
+  "version": "1.13.2",
   "type": "module",
   "main": "./dist/tolgee-editor.js",
   "types": "./lib/tolgee-editor.d.ts",
