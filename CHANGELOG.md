@@ -1,3 +1,10 @@
+## [1.13.4](https://github.com/tolgee/editor/compare/v1.13.3...v1.13.4) (2024-03-01)
+
+
+### Bug Fixes
+
+* unescapeAll multiple escaped characters after each other ([0272c92](https://github.com/tolgee/editor/commit/0272c92c9dc3c0b99a621cf6dceeaa46e6b4719d))
+
 ## [1.13.3](https://github.com/tolgee/editor/compare/v1.13.2...v1.13.3) (2024-03-01)
 
 
