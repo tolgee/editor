@@ -1,7 +1,8 @@
 const StateText = 0,
-  StateEscapedMaybe = 1;
+  StateEscapedMaybe = 1,
+  StateEscaping = 2;
 
-type State = typeof StateText | typeof StateEscapedMaybe;
+type State = typeof StateText | typeof StateEscapedMaybe | typeof StateEscaping;
 
 const ESCAPABLE = new Set(["{", "}", "#"]);
 const ESCAPE_CHAR = "'";
@@ -18,7 +19,7 @@ export const escapeIcuAll = (input: string) => {
         } else if (ESCAPABLE.has(char)) {
           result.push(ESCAPE_CHAR);
           result.push(char);
-          result.push(ESCAPE_CHAR);
+          state = StateEscaping;
         } else {
           result.push(char);
         }
@@ -30,21 +31,33 @@ export const escapeIcuAll = (input: string) => {
           // add another layer of escape on top
           result.push(ESCAPE_CHAR);
           result.push(char);
-          result.push(ESCAPE_CHAR);
+          state = StateEscaping;
         } else if (char === ESCAPE_CHAR) {
           // two escape chars - escape both
           result.push(ESCAPE_CHAR);
           result.push(char);
           result.push(ESCAPE_CHAR);
+          state = StateText;
         } else {
           result.push(char);
+          state = StateText;
         }
-        state = StateText;
         break;
+      case StateEscaping:
+        if (ESCAPABLE.has(char)) {
+          result.push(char);
+        } else if (char === ESCAPE_CHAR) {
+          result.push(ESCAPE_CHAR);
+          result.push(ESCAPE_CHAR);
+        } else {
+          result.push(ESCAPE_CHAR);
+          result.push(char);
+          state = StateText;
+        }
     }
   }
 
-  if (state === StateEscapedMaybe) {
+  if ([StateEscapedMaybe, StateEscaping].includes(state)) {
     result.push(ESCAPE_CHAR);
   }
   return result.join("");

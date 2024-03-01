@@ -40,4 +40,8 @@ describe("unescapes icu variant", () => {
   it("handles tough escape sequence", () => {
     expect(unescapeIcuAll("' ' '{ '' ' '' '")).toEqual("' ' { '  ' '");
   });
+
+  it("handles case with two escapes inside escape sequence", () => {
+    expect(unescapeIcuAll("'{''}'")).toEqual("{'}");
+  });
 });

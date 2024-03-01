@@ -1,8 +1,11 @@
 import { escapeIcuAll } from "./escapeIcuAll";
 import { unescapeIcuAll } from "./unescapeIcuAll";
+import { parse } from "@formatjs/icu-messageformat-parser";
 
 function escapeAndUnescape(text: string) {
-  expect(unescapeIcuAll(escapeIcuAll(text))).toEqual(text);
+  const result = escapeIcuAll(text);
+  parse(`{value, plural, other {${result}}}`);
+  expect(unescapeIcuAll(result)).toEqual(text);
 }
 
 describe("escape icu variant", () => {
@@ -38,11 +41,15 @@ describe("escape icu variant", () => {
     escapeAndUnescape("test '");
   });
 
-  it("doesn't take tags escapes into consideration", () => {
-    escapeAndUnescape("'<'");
-  });
-
   it("handles tough escape sequence", () => {
     escapeAndUnescape("'' ' '{ '' ' '' '");
+  });
+
+  it("handles case with two escapes inside escape sequence", () => {
+    escapeAndUnescape("{}");
+  });
+
+  it("handles multiple escape chars after one another", () => {
+    escapeAndUnescape("{{'''{'}}'");
   });
 });
