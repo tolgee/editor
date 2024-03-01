@@ -1,3 +1,10 @@
+## [1.13.3](https://github.com/tolgee/editor/compare/v1.13.2...v1.13.3) (2024-03-01)
+
+
+### Bug Fixes
+
+* correctly handle escaped quote in escape sequence ([927390b](https://github.com/tolgee/editor/commit/927390b46348f1598ae427cf8fab2a77381d18ea))
+
 ## [1.13.2](https://github.com/tolgee/editor/compare/v1.13.1...v1.13.2) (2024-02-29)
 
 
