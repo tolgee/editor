@@ -66,4 +66,10 @@ describe("escape icu variant", () => {
   it("escapes stuff correctly when apostrophe as parameter", () => {
     expect(escapeIcuVariant("{ ' }")).toEqual("'{' ' '}'");
   });
+
+  it("handles apostrophes and dangling escape sequence at the end", () => {
+    expect(escapeIcuVariant("# položka seznamu '{ '' }")).toEqual(
+      "# položka seznamu '{ '' }'"
+    );
+  });
 });
