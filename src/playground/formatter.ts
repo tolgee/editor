@@ -15,52 +15,64 @@ import {
   SelectVariant,
 } from "../parser/lezer/tolgeeParser.terms";
 import { updateNumberFormatOptions } from "./formatModifiers";
+import { unescapeIcuAll } from "../parser/unescapeIcuAll";
 
-const STATE_TEXT = 0,
-  STATE_ESCAPE_MAYBE = 1,
-  STATE_ESCAPE = 2;
-const CHAR_ESCAPE = "'";
-const ESCAPABLE = new Set(["{", CHAR_ESCAPE]);
+// const StateText = 0,
+//   StateEscapedMaybe = 1,
+//   StateEscaped = 2,
+//   StateEscapeEndMaybe = 3;
+// const ESCAPE_CHAR = "'";
+// const ESCAPABLE = new Set(["{", ESCAPE_CHAR]);
 
-type State =
-  | typeof STATE_TEXT
-  | typeof STATE_ESCAPE_MAYBE
-  | typeof STATE_ESCAPE;
+// type State =
+//   | typeof StateText
+//   | typeof StateEscapedMaybe
+//   | typeof StateEscaped
+//   | typeof StateEscapeEndMaybe;
 
-function removeEscape(text: string) {
-  const result = [];
-  let state: State = STATE_TEXT;
-  for (const ch of text) {
-    switch (state) {
-      case STATE_TEXT:
-        if (ch === CHAR_ESCAPE) {
-          state = STATE_ESCAPE_MAYBE;
-        } else {
-          result.push(ch);
-        }
-        break;
-      case STATE_ESCAPE_MAYBE:
-        if (ESCAPABLE.has(ch)) {
-          state = STATE_ESCAPE;
-        } else {
-          state = STATE_TEXT;
-          result.push(CHAR_ESCAPE);
-        }
-        result.push(ch);
-        break;
-      case STATE_ESCAPE:
-        if (ch === CHAR_ESCAPE) {
-          state = STATE_TEXT;
-        } else {
-          result.push(ch);
-        }
-    }
-  }
-  if (state === STATE_ESCAPE_MAYBE) {
-    result.push(CHAR_ESCAPE);
-  }
-  return result.join("");
-}
+// function removeEscape(text: string) {
+//   const result = [];
+//   let state: State = StateText;
+//   for (const char of text) {
+//     switch (state) {
+//       case StateText:
+//         if (char === ESCAPE_CHAR) {
+//           state = StateEscapedMaybe;
+//         } else {
+//           result.push(char);
+//         }
+//         break;
+//       case StateEscapedMaybe:
+//         if (ESCAPABLE.has(char)) {
+//           state = StateEscaped;
+//         } else {
+//           state = StateText;
+//           result.push(ESCAPE_CHAR);
+//         }
+//         result.push(char);
+//         break;
+//       case StateEscaped:
+//         if (char === ESCAPE_CHAR) {
+//           state = StateEscapeEndMaybe;
+//         } else {
+//           result.push(char);
+//         }
+//         break;
+//       case StateEscapeEndMaybe:
+//         if (char === ESCAPE_CHAR) {
+//           state = StateEscaped;
+//           result.push(ESCAPE_CHAR);
+//         } else {
+//           result.push(char);
+//           state = StateText;
+//         }
+//     }
+//   }
+//   if (state === StateEscapedMaybe) {
+//     result.push(ESCAPE_CHAR);
+//   }
+//   return result.join("");
+// }
 
 type Context = {
   type?: typeof FormatExpression | typeof SelectExpression;
@@ -98,11 +110,7 @@ export function formatter(
     switch (cursor.type.id) {
       case Text:
       case TextNested:
-        if (context.activeVariant) {
-          pushText(removeEscape(text));
-        } else {
-          pushText(removeEscape(text));
-        }
+        pushText(unescapeIcuAll(text));
         break;
       case ExpressionOpen:
         contextStack.push({ result: "" });

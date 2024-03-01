@@ -76,7 +76,12 @@ function matchText(
         break;
       case StateEscaped:
         if (char === ESCAPE_CHAR) {
-          state = StateText;
+          if (fromCodePoint(input.peek(1)) === ESCAPE_CHAR) {
+            // two escape chars in escape section
+            input.advance();
+          } else {
+            state = StateText;
+          }
         }
         break;
     }

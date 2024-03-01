@@ -46,4 +46,10 @@ describe("escape icu variant", () => {
   it("doesn't take tags escapes into consideration", () => {
     expect(escapeIcuAll("'<'")).toEqual("'<''");
   });
+
+  it("handles tough escape sequence", () => {
+    expect(escapeIcuAll("' ' '{ '' ' '' '")).toEqual(
+      "' ' '''{' '''' ' '''' ''"
+    );
+  });
 });

@@ -13,8 +13,7 @@ function getText() {
   return expect.getState().currentTestName!.replace("simple formatter ", "");
 }
 
-function matchIcu(params?: TranslateParams) {
-  const text = getText();
+function matchIcu(params?: TranslateParams, text = getText()) {
   locales.forEach((locale) => {
     const icuResult = icu(locale, text, params);
     const myResult = formatter(locale, text, params);
@@ -132,5 +131,17 @@ describe("simple formatter", () => {
 
   test(`الاقتص– تضر البيئة – الاستخراج {لاقتصاد, number, percent} الموارد الطبيعية –`, () => {
     matchIcu({ لاقتصاد: 0.1 });
+  });
+
+  test("correctly handles escaped escapes in escape sequence", () => {
+    matchIcu(undefined, "escaped '{} '' escape'");
+  });
+
+  test("escaped '{} { escape'", () => {
+    matchIcu();
+  });
+
+  test("tough escape sequence", () => {
+    matchIcu(undefined, "'' ' '{ '' ' '' '");
   });
 });

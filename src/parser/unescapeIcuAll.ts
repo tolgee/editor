@@ -1,8 +1,13 @@
 const StateText = 0,
   StateEscapedMaybe = 1,
-  StateEscaped = 2;
+  StateEscaped = 2,
+  StateEscapeEndMaybe = 3;
 
-type State = typeof StateText | typeof StateEscapedMaybe | typeof StateEscaped;
+type State =
+  | typeof StateText
+  | typeof StateEscapedMaybe
+  | typeof StateEscaped
+  | typeof StateEscapeEndMaybe;
 
 const ESCAPABLE = new Set(["{", "}", "#"]);
 const ESCAPE_CHAR = "'";
@@ -32,11 +37,24 @@ export const unescapeIcuAll = (input: string) => {
         break;
       case StateEscaped:
         if (char === ESCAPE_CHAR) {
-          state = StateText;
+          state = StateEscapeEndMaybe;
         } else {
           result.push(char);
         }
+        break;
+      case StateEscapeEndMaybe:
+        if (char === ESCAPE_CHAR) {
+          state = StateEscaped;
+          result.push(ESCAPE_CHAR);
+        } else {
+          result.push(char);
+          state = StateText;
+        }
     }
+  }
+
+  if (state === StateEscapedMaybe) {
+    result.push(ESCAPE_CHAR);
   }
 
   return result.join("");

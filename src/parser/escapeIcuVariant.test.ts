@@ -54,4 +54,16 @@ describe("escape icu variant", () => {
   it("doesn't take tags escapes into consideration", () => {
     expect(escapeIcuVariant("'<'")).toEqual("'<''");
   });
+
+  it("handles apostrophes in escape sequence correctly", () => {
+    expect(escapeIcuVariant("'{ '' }'")).toEqual("'{ '' }'");
+  });
+
+  it("escapes stuff correctly when apostrophes as parameter", () => {
+    expect(escapeIcuVariant("{ '' }")).toEqual("'{ '' }'");
+  });
+
+  it("escapes stuff correctly when apostrophe as parameter", () => {
+    expect(escapeIcuVariant("{ ' }")).toEqual("'{' ' '}'");
+  });
 });
