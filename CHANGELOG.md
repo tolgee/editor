@@ -1,3 +1,10 @@
+## [1.13.5](https://github.com/tolgee/editor/compare/v1.13.4...v1.13.5) (2024-03-06)
+
+
+### Bug Fixes
+
+* plural rules for custom tags ([2ca0a84](https://github.com/tolgee/editor/commit/2ca0a84b38b1f33d168234493e73a9e04508e443))
+
 ## [1.13.4](https://github.com/tolgee/editor/compare/v1.13.3...v1.13.4) (2024-03-01)
 
 
