@@ -16,6 +16,7 @@ import {
 } from "../parser/lezer/tolgeeParser.terms";
 import { updateNumberFormatOptions } from "./formatModifiers";
 import { unescapeIcuAll } from "../parser/unescapeIcuAll";
+import { selectPluralRule } from "../utils/plurals";
 
 // const StateText = 0,
 //   StateEscapedMaybe = 1,
@@ -170,7 +171,7 @@ export function formatter(
           if (context.variants!["other"] === undefined) {
             throw Error(`Missing 'other' variant`);
           }
-          const expectedVariant = new Intl.PluralRules(locale).select(value);
+          const expectedVariant = selectPluralRule(locale, value);
           if (context.variants![expectedVariant]) {
             context.result = context.variants![expectedVariant];
           } else {

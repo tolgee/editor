@@ -1,4 +1,7 @@
 // Taken from
+
+import { getPluralRules, selectPluralRule } from "./plurals";
+
 // https://www.unicode.org/cldr/charts/44/supplemental/language_plural_rules.html
 const POSSIBLE_MANY = [6, 7, 8, 11, 20, 21, 1000000, 0.5, 0.1, 0.0];
 const POSSIBLE_FEW = [0, 2, 3, 4, 6];
@@ -14,9 +17,7 @@ const SORTED_PLURALS: Intl.LDMLPluralRule[] = [
 ];
 
 export const getPluralVariants = (locale: string) => {
-  const categories = new Set(
-    new Intl.PluralRules(locale).resolvedOptions().pluralCategories
-  );
+  const categories = new Set(getPluralRules(locale));
 
   return SORTED_PLURALS.filter((i) => categories.has(i));
 };
@@ -26,8 +27,7 @@ const findVariantExample = (
   locale: string,
   list: number[]
 ) => {
-  const intl = new Intl.PluralRules(locale);
-  return list.find((num) => intl.select(num) === variant);
+  return list.find((num) => selectPluralRule(locale, num) === variant);
 };
 
 export const getVariantExample = (locale: string, variant: string) => {

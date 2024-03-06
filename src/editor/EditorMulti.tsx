@@ -2,6 +2,7 @@ import { useMemo } from "react";
 import { Editor } from "./Editor";
 import { Placeholder, TolgeeFormat } from "../parser/types";
 import React from "react";
+import { getPluralRules } from "../utils/plurals";
 
 type Props = {
   value: TolgeeFormat;
@@ -16,10 +17,7 @@ export const EditorMulti = ({
   placeholders,
   allowedNewPlaceholders,
 }: Props) => {
-  const pluralVariants = useMemo(
-    () => new Intl.PluralRules(locale).resolvedOptions().pluralCategories,
-    [locale]
-  );
+  const pluralVariants = useMemo(() => getPluralRules(locale), [locale]);
 
   return (
     <div>

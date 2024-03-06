@@ -11,4 +11,5 @@ export { getTolgeePlurals } from "./parser/getTolgeePlurals";
 export { getTolgeeFormat } from "./parser/getTolgeeFormat";
 export { getPluralVariants, getVariantExample } from "./utils/pluralTools";
 export { getLanguageDirection } from "./utils/getLanguageDirection";
+export { getPluralRules, selectPluralRule } from "./utils/plurals";
 export * from "./parser/types";
