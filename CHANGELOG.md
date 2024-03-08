@@ -1,3 +1,11 @@
+# [1.14.0](https://github.com/tolgee/editor/compare/v1.13.5...v1.14.0) (2024-03-08)
+
+
+### Features
+
+* add parameter extractor ([993c609](https://github.com/tolgee/editor/commit/993c6099db2d03511c1774ea094c4433a6059387))
+* add parameter extractor ([3a07cd8](https://github.com/tolgee/editor/commit/3a07cd81b791db24e9ce8cdb60448c9247ed2d0d))
+
 ## [1.13.5](https://github.com/tolgee/editor/compare/v1.13.4...v1.13.5) (2024-03-06)
 
 
