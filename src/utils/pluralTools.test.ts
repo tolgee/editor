@@ -20,4 +20,8 @@ describe("variant example", () => {
   it("extracts negative number from = variant", () => {
     expect(getVariantExample("cs", "=-10")).toEqual(-10);
   });
+
+  it("won't fail for custom language tag", () => {
+    expect(getVariantExample("aa-custom-lang-test", "one")).toBeUndefined();
+  });
 });
