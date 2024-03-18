@@ -5,10 +5,12 @@ import {
   ViewPlugin,
   ViewUpdate,
   WidgetType,
+  hoverTooltip,
 } from "@codemirror/view";
-import { getPlaceholders } from "./getPlaceholders";
+import { getPlaceholders } from "./placeholders/getPlaceholders";
 import {
   ChangeSet,
+  Extension,
   RangeSetBuilder,
   StateField,
   Transaction,
@@ -150,10 +152,11 @@ export type Options = {
   allowedNewPlaceholders?: Partial<Placeholder>[];
   examplePluralNum?: number;
   nested: boolean;
+  tooltips: boolean;
 };
 
 export const PlaceholderPlugin = (options: Options) => {
-  const { noUpdates, allowedNewPlaceholders, nested } = options;
+  const { noUpdates, allowedNewPlaceholders, nested, tooltips } = options;
   return StateField.define<Placeholder[]>({
     create(state) {
       try {
@@ -200,30 +203,56 @@ export const PlaceholderPlugin = (options: Options) => {
       return value;
     },
     provide(f) {
-      return ViewPlugin.fromClass(
-        class {
-          decorationSet: DecorationSet;
-          constructor(view: EditorView) {
-            this.decorationSet = buildSet(
-              view.state.field(f),
-              options?.examplePluralNum
-            );
+      const extensions: Extension[] = [
+        ViewPlugin.fromClass(
+          class {
+            decorationSet: DecorationSet;
+            constructor(view: EditorView) {
+              this.decorationSet = buildSet(
+                view.state.field(f),
+                options?.examplePluralNum
+              );
+            }
+            update(change: ViewUpdate) {
+              this.decorationSet = buildSet(
+                change.state.field(f),
+                options?.examplePluralNum
+              );
+            }
+          },
+          {
+            decorations: (instance) => instance.decorationSet,
+            provide: (plugin) =>
+              EditorView.atomicRanges.of((view) => {
+                return view.plugin(plugin)?.decorationSet || Decoration.none;
+              }),
           }
-          update(change: ViewUpdate) {
-            this.decorationSet = buildSet(
-              change.state.field(f),
-              options?.examplePluralNum
-            );
-          }
-        },
-        {
-          decorations: (instance) => instance.decorationSet,
-          provide: (plugin) =>
-            EditorView.atomicRanges.of((view) => {
-              return view.plugin(plugin)?.decorationSet || Decoration.none;
-            }),
-        }
-      );
+        ),
+      ];
+      if (tooltips) {
+        extensions.push(
+          hoverTooltip((view, pos, side) => {
+            const placeholders = view.state.field(f);
+            const placeholder = placeholders.find(({ position }) => {
+              return pos === position.start && side > 0;
+            });
+            console.log(placeholder);
+            if (!placeholder) {
+              return null;
+            }
+            return {
+              pos: placeholder.position.start,
+              end: placeholder.position.end,
+              create() {
+                const dom = document.createElement("div");
+                dom.textContent = placeholder.normalizedValue;
+                return { dom };
+              },
+            };
+          })
+        );
+      }
+      return extensions;
     },
   });
 };

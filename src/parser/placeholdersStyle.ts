@@ -86,6 +86,12 @@ export const generatePlaceholdersStyle = ({
       padding-left: 6px;
     }
 
+    & .placeholder-tagSelfClosed {
+      border: 1px solid ${colors.tag.border};
+      background-color: ${colors.tag.background};
+      color: ${colors.tag.text};
+    }
+
     // in rtl mode, revert the placeholders direction
     &[dir="rtl"] .placeholder-tagOpen {
       border-radius: 0px 10px 10px 0px;

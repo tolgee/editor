@@ -5,8 +5,7 @@ import { EditorMulti } from "./editor/EditorMulti";
 
 function App() {
   const [value, setValue] = useState(
-    `I have {value, number, ::short} items in basket.
-This is <i>italic</i>.`
+    `I have {value, number, ::short} items in basket. This is <a href="test">italic</i>.`
   );
   const [placeholders, setPlaceholders] = useState(true);
 
@@ -14,7 +13,7 @@ This is <i>italic</i>.`
     return getTolgeePlurals(value, false);
   }, [value]);
 
-  const [plurals, setPlurals] = useState(Boolean(parsedValue));
+  const [plurals, setPlurals] = useState(Boolean(parsedValue.parameter));
 
   return (
     <div>

@@ -1,10 +1,8 @@
 @top Root { content? }
 @top Nested { contentNested? }
 
-@dialects { tags }
-
-content { (Text | Expression | PluralPlaceholder | HtmlTag) content? }
-contentNested { (TextNested | Expression | PluralPlaceholder | HtmlTagNested) contentNested? }
+content { (Text | Expression | PluralPlaceholder ) content? }
+contentNested { (TextNested | Expression | PluralPlaceholder ) contentNested? }
 
 Expression { ExpressionOpen (FormatExpression | SelectExpression) ExpressionClose }
 
@@ -24,20 +22,12 @@ PluralPlaceholder { plural_placeholder }
 FormatFunction { format_function }
 FormatStyle { format_style }
 
-HtmlTag { HtmlTagOpen | HtmlTagClose }
-HtmlTagNested { HtmlTagOpenNested | HtmlTagCloseNested }
-
-
-@external tokens text from "./textTokenizer" { 
-  Text,
-  HtmlTagOpen,
-  HtmlTagClose
+@external tokens text from "./tokenizer/tokenizer" { 
+  Text
 }
 
-@external tokens textNested from "./textTokenizer" { 
-  TextNested,
-  HtmlTagOpenNested,
-  HtmlTagCloseNested
+@external tokens textNested from "./tokenizer/tokenizer" { 
+  TextNested
 }
 
 @tokens {

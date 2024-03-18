@@ -1,19 +1,18 @@
-import { parser } from "./lezer/tolgeeParser";
+import { parser } from "../lezer/tolgeeParser";
 import {
   Expression,
   FormatExpression,
   FormatFunction,
   FormatStyle,
-  HtmlTag,
-  HtmlTagNested,
-  HtmlTagOpen,
-  HtmlTagOpenNested,
   Param,
   PluralPlaceholder,
-} from "./lezer/tolgeeParser.terms";
+  Text,
+  TextNested,
+} from "../lezer/tolgeeParser.terms";
 
 import type { SyntaxNode, Tree } from "@lezer/common";
-import { Placeholder } from "./types";
+import { Placeholder } from "../types";
+import { TagInfoType, findTags } from "./findTags";
 
 function getAllChildren(node: SyntaxNode) {
   const result: SyntaxNode[] = [];
@@ -33,7 +32,6 @@ export const getPlaceholders = (input: string, nested?: boolean) => {
       .configure({
         strict: true,
         top: nested ? "Nested" : "Root",
-        dialect: "tags",
       })
       .parse(input);
   } catch (e) {
@@ -87,22 +85,50 @@ export const getPlaceholders = (input: string, nested?: boolean) => {
     } satisfies Placeholder;
   }
 
-  function placeholderFromTag(htmlTag: SyntaxNode) {
-    const innerNode = htmlTag.firstChild!;
-    const isOpen = [HtmlTagOpen, HtmlTagOpenNested].includes(innerNode.type.id);
-    const text = getNodeText(innerNode);
+  function getNormalizedValue(info: TagInfoType) {
+    let result = "<";
+    if (info.type === "close") {
+      result += "/";
+    }
+    result += info.name;
+    Object.entries(info.params).forEach(([name, value]) => {
+      result += ` ${name}`;
+      if (value !== true) {
+        result += `=${value}`;
+      }
+    });
+    if (info.type === "self-closed") {
+      result += " />";
+    } else {
+      result += ">";
+    }
 
-    const name = text.substring(isOpen ? 1 : 2, text.length - 1).trim();
+    return result;
+  }
 
+  function placeholderFromTag(info: TagInfoType) {
     return {
-      position: { start: innerNode.from, end: innerNode.to },
-      type: isOpen ? "tagOpen" : "tagClose",
-      name,
-      normalizedValue: isOpen ? `<${name}>` : `</${name}>`,
+      position: info.position,
+      type:
+        info.type === "open"
+          ? "tagOpen"
+          : info.type === "close"
+          ? "tagClose"
+          : "tagSelfClosed",
+      name: info.name,
+      normalizedValue: getNormalizedValue(info),
     } satisfies Placeholder;
   }
 
   function addPlaceholder(placeholder: Placeholder) {
+    const value = input.substring(
+      placeholder.position.start,
+      placeholder.position.end
+    );
+    if (value.includes("\n")) {
+      return;
+    }
+
     if (placeholder.type === "tagOpen") {
       const values = openTags.get(placeholder.name!) ?? [];
       values.push(placeholder);
@@ -126,6 +152,7 @@ export const getPlaceholders = (input: string, nested?: boolean) => {
   let enter: boolean;
   do {
     const node = cursor.node;
+    enter = true;
     switch (node.type.id) {
       case PluralPlaceholder:
         addPlaceholder({
@@ -146,15 +173,24 @@ export const getPlaceholders = (input: string, nested?: boolean) => {
         break;
       }
 
-      case HtmlTagNested:
-      case HtmlTag:
-        addPlaceholder(placeholderFromTag(node));
+      case Text:
+      case TextNested: {
+        findTags(getNodeText(node)).forEach((tagInfo) => {
+          console.log(getNodeText(node), tagInfo.position);
+          return addPlaceholder(
+            placeholderFromTag({
+              ...tagInfo,
+              position: {
+                start: tagInfo.position.start + node.from,
+                end: tagInfo.position.end + node.from,
+              },
+            })
+          );
+        });
+
         enter = false;
         break;
-
-      default:
-        enter = true;
-        break;
+      }
     }
   } while (cursor.next(enter));
 

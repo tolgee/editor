@@ -93,6 +93,7 @@ export const Editor: React.FC<Props> = ({
               noUpdates: placeholders === "initial",
               allowedNewPlaceholders,
               nested,
+              tooltips: true,
             }),
           ];
     editor.current?.dispatch({

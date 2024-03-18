@@ -2,7 +2,7 @@ import { parser } from "./lezer/tolgeeParser";
 import { LRLanguage, LanguageSupport } from "@codemirror/language";
 import { styleTags, tags as t } from "@lezer/highlight";
 
-/// A language provider based on the [Lezer Lezer
+/// A language provider based on the [Lezer
 /// parser](https://github.com/lezer-parser/lezer-grammar), extended
 /// with highlighting and indentation information.
 export const lezerLanguage = (nested: boolean) =>
@@ -10,7 +10,6 @@ export const lezerLanguage = (nested: boolean) =>
     name: "icu-tolgee",
     parser: parser.configure({
       top: nested ? "Nested" : "Root",
-      dialect: "tags",
       props: [
         styleTags({
           TextRoot: t.string,
