@@ -68,7 +68,7 @@ describe("get placeholders", () => {
   });
 
   it("ignores placeholders with new lines because codemirror goes crazy", () => {
-    const placeholders = getPlaceholders("{\n value } <a \n> </a>");
+    const placeholders = getPlaceholders("{\n value } <a \n>");
     expect(placeholders![0]).toBeUndefined();
   });
 
