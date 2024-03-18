@@ -1,3 +1,11 @@
+# [1.15.0](https://github.com/tolgee/editor/compare/v1.14.0...v1.15.0) (2024-03-18)
+
+
+### Features
+
+* remove tags from icu format and add them as an additional layer ([eca9819](https://github.com/tolgee/editor/commit/eca9819a589e36d224522e40e43f53cdbe22dbc3))
+* remove tags from icu format and add them as an additional layer ([ccfe30e](https://github.com/tolgee/editor/commit/ccfe30e471c4c613ef3a1b92d1001be378d7bed4))
+
 # [1.14.0](https://github.com/tolgee/editor/compare/v1.13.5...v1.14.0) (2024-03-08)
 
 
