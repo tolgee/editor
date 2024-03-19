@@ -236,7 +236,6 @@ export const PlaceholderPlugin = (options: Options) => {
             const placeholder = placeholders.find(({ position }) => {
               return pos === position.start && side > 0;
             });
-            console.log(placeholder);
             if (!placeholder) {
               return null;
             }

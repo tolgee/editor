@@ -176,7 +176,6 @@ export const getPlaceholders = (input: string, nested?: boolean) => {
       case Text:
       case TextNested: {
         findTags(getNodeText(node)).forEach((tagInfo) => {
-          console.log(getNodeText(node), tagInfo.position);
           return addPlaceholder(
             placeholderFromTag({
               ...tagInfo,
