@@ -1,3 +1,10 @@
+## [1.15.1](https://github.com/tolgee/editor/compare/v1.15.0...v1.15.1) (2024-03-19)
+
+
+### Bug Fixes
+
+* remove console logs and add no-console rule ([0357df5](https://github.com/tolgee/editor/commit/0357df53c661c874b9e80df1f18da6983b4adf3b))
+
 # [1.15.0](https://github.com/tolgee/editor/compare/v1.14.0...v1.15.0) (2024-03-18)
 
 
