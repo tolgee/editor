@@ -82,4 +82,19 @@ describe("get placeholders", () => {
     expect(placeholders![3].normalizedValue).toEqual("</a>");
     expect(placeholders![4].normalizedValue).toEqual("{test}");
   });
+
+  it("correctly indexes characters when unicode chars present - tags", () => {
+    const placeholders = getPlaceholders("🐭-<link>blog</link>");
+    const first = placeholders![0];
+    expect(first.normalizedValue).toEqual("<link>");
+    expect(first.position.start).toEqual(3);
+    expect(placeholders![1].normalizedValue).toEqual("</link>");
+  });
+
+  it("correctly indexes characters when unicode chars present - placeholders", () => {
+    const placeholders = getPlaceholders("🐭-{test}-");
+    const first = placeholders![0];
+    expect(first.normalizedValue).toEqual("{test}");
+    expect(first.position.start).toEqual(3);
+  });
 });
