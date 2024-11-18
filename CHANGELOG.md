@@ -1,3 +1,10 @@
+## [1.15.2](https://github.com/tolgee/editor/compare/v1.15.1...v1.15.2) (2024-11-18)
+
+
+### Bug Fixes
+
+* double chars unicode characters breaking placeholders ([9b70ba9](https://github.com/tolgee/editor/commit/9b70ba9bc29e92d97bedec48dfa7a21a9e4a74d0))
+
 ## [1.15.1](https://github.com/tolgee/editor/compare/v1.15.0...v1.15.1) (2024-03-19)
 
 
