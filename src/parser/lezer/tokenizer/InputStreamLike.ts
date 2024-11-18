@@ -1,17 +1,17 @@
 export const InputStreamLike = (input: string) => {
-  const codePoints = [...input].map((ch) => ch.charCodeAt(0));
-
   let position = 0;
 
   const self = {
     get next() {
-      return codePoints[position] ?? -1;
+      const char = input[position];
+      return char ? input.charCodeAt(position) : -1;
     },
     get pos() {
       return position;
     },
     peek(val: number) {
-      return codePoints[position + val] ?? -1;
+      const char = input[position + val];
+      return char ? input.charCodeAt(position + val) : -1;
     },
     advance(val = 1) {
       position += val;
