@@ -14,4 +14,5 @@ export type Placeholder = {
 export type TolgeeFormat = {
   parameter?: string;
   variants: Partial<Record<Intl.LDMLPluralRule, string | undefined>>;
+  variantOffsets?: Partial<Record<Intl.LDMLPluralRule, number>>;
 };

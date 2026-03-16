@@ -26,18 +26,17 @@ function getVariantContent(
   variantNode: SyntaxNode,
   input: string,
   raw: boolean
-) {
+): { text: string; offset: number } {
   let node: SyntaxNode | null | undefined = variantNode.firstChild;
   do {
     if (node?.type.id === VariantContent) {
-      if (raw) {
-        return unescapeIcuAll(getNodeText(node, input));
-      } else {
-        return getNodeText(node, input);
-      }
+      const text = raw
+        ? unescapeIcuAll(getNodeText(node, input))
+        : getNodeText(node, input);
+      return { text, offset: node.from };
     }
   } while ((node = node?.nextSibling));
-  return "";
+  return { text: "", offset: 0 };
 }
 
 function returnNoPlural(value: string): TolgeeFormat {
@@ -55,6 +54,7 @@ export const getTolgeePlurals = (input: string, raw: boolean): TolgeeFormat => {
 
   const nodes: Record<number, SyntaxNode> = {};
   const variants: Record<string, string | undefined> = {};
+  const offsets: Record<string, number> = {};
 
   const requiredIndexes = Object.keys(REQUIRED_NODES);
   const lastIndex = Number(requiredIndexes[requiredIndexes.length - 1]);
@@ -94,16 +94,22 @@ export const getTolgeePlurals = (input: string, raw: boolean): TolgeeFormat => {
   let variant: SyntaxNode | null = nodes[SelectVariant];
   do {
     const variantName = getNodeText(variant.firstChild!, input);
-    const variantContent = getVariantContent(variant, input, raw);
+    const { text: variantText, offset } = getVariantContent(
+      variant,
+      input,
+      raw
+    );
     if (variants[variantName] !== undefined) {
       // two variants with the same name
       return returnNoPlural(input);
     }
-    variants[variantName] = variantContent;
+    variants[variantName] = variantText;
+    offsets[variantName] = offset;
   } while ((variant = variant.nextSibling));
 
   return {
     parameter: getNodeText(nodes[Param], input),
     variants,
+    variantOffsets: offsets,
   };
 };
