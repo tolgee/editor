@@ -1,3 +1,10 @@
+# [1.16.0](https://github.com/tolgee/editor/compare/v1.15.2...v1.16.0) (2026-03-17)
+
+
+### Features
+
+* add variantOffsets to TolgeeFormat ([#5](https://github.com/tolgee/editor/issues/5)) ([9cf3dfe](https://github.com/tolgee/editor/commit/9cf3dfe0d8569813b51a4acefe39feb9a903cad9))
+
 ## [1.15.2](https://github.com/tolgee/editor/compare/v1.15.1...v1.15.2) (2024-11-18)
 
 
