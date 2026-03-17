@@ -94,6 +94,10 @@
       }
     ]
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tolgee/editor"
+  },
   "publishConfig": {
     "access": "public"
   }
