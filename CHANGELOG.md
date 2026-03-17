@@ -1,3 +1,10 @@
+## [1.16.1](https://github.com/tolgee/editor/compare/v1.16.0...v1.16.1) (2026-03-17)
+
+
+### Bug Fixes
+
+* add repository.url to package.json for provenance validation ([9d46082](https://github.com/tolgee/editor/commit/9d46082017db886e1c9f3b89c3653f3397195dbf))
+
 # [1.16.0](https://github.com/tolgee/editor/compare/v1.15.2...v1.16.0) (2026-03-17)
 
 
