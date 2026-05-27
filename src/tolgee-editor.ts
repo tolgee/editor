@@ -14,3 +14,8 @@ export { getPluralVariants, getVariantExample } from "./utils/pluralTools";
 export { getLanguageDirection } from "./utils/getLanguageDirection";
 export { getPluralRules, selectPluralRule } from "./utils/plurals";
 export * from "./parser/types";
+export {
+  KeyNamePlugin,
+  PO_MSGCTXT_KEY_SEPARATOR,
+} from "./parser/KeyNamePlugin";
+export { generateKeyNameStyle } from "./parser/keyNameStyle";
