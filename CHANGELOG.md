@@ -1,3 +1,10 @@
+# [1.17.0](https://github.com/tolgee/editor/compare/v1.16.1...v1.17.0) (2026-05-27)
+
+
+### Features
+
+* add KeyNamePlugin for msgctxt separator chip ([#8](https://github.com/tolgee/editor/issues/8)) ([06266ec](https://github.com/tolgee/editor/commit/06266ecb2ba26d7ace71277e586ecb4646b79a4b))
+
 ## [1.16.1](https://github.com/tolgee/editor/compare/v1.16.0...v1.16.1) (2026-03-17)
 
 
