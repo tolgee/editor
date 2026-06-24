@@ -97,4 +97,29 @@ describe("get placeholders", () => {
     expect(first.normalizedValue).toEqual("{test}");
     expect(first.position.start).toEqual(3);
   });
+
+  it("parse html entity", () => {
+    const placeholders = getPlaceholders("Activit&eacute;");
+    expect(placeholders![0].type).toEqual("entity");
+    expect(placeholders![0].name).toEqual("é");
+    expect(placeholders![0].normalizedValue).toEqual("&eacute;");
+  });
+
+  it("ignores a bare ampersand", () => {
+    expect(getPlaceholders("Tom & Jerry")).toEqual([]);
+  });
+
+  it("orders entities and tags by position", () => {
+    const placeholders = getPlaceholders("&amp;<a>x</a>");
+    expect(placeholders!.map((p) => p.type)).toEqual([
+      "entity",
+      "tagOpen",
+      "tagClose",
+    ]);
+  });
+
+  it("ignores entities inside a tag attribute", () => {
+    const placeholders = getPlaceholders('<a href="x&amp;y">z</a>');
+    expect(placeholders!.map((p) => p.type)).toEqual(["tagOpen", "tagClose"]);
+  });
 });
