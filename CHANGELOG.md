@@ -1,3 +1,10 @@
+# [1.18.0](https://github.com/tolgee/editor/compare/v1.17.0...v1.18.0) (2026-06-30)
+
+
+### Features
+
+* highlight and decode HTML entities in the editor ([46e568d](https://github.com/tolgee/editor/commit/46e568d4b772405585ed4781dbfb1a2e5d229175)), closes [#233](https://github.com/tolgee/editor/issues/233) [#xE9](https://github.com/tolgee/editor/issues/xE9)
+
 # [1.17.0](https://github.com/tolgee/editor/compare/v1.16.1...v1.17.0) (2026-05-27)
 
 
