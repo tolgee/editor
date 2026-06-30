@@ -18,7 +18,8 @@ export default defineConfig({
   },
   plugins: [
     react(),
-    externalizeDeps(),
+    // bundle `entities` so consumers don't need it as a direct dependency
+    externalizeDeps({ except: ["entities"] }),
     {
       name: "build-parser",
       watchChange(id) {

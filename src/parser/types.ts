@@ -4,7 +4,7 @@ export type Position = {
 };
 
 export type Placeholder = {
-  type: "variable" | "tagOpen" | "tagClose" | "tagSelfClosed" | "hash";
+  type: "variable" | "tagOpen" | "tagClose" | "tagSelfClosed" | "hash" | "entity";
   position: Position;
   name: string;
   error?: "missing_open_tag" | "missing_close_tag";

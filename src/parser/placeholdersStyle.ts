@@ -10,6 +10,7 @@ export type Placeholders = {
   variable: Placeholder;
   tag: Placeholder;
   variant: Placeholder;
+  entity: Placeholder;
 };
 
 const DEFAULT_COLORS = {
@@ -28,11 +29,16 @@ const DEFAULT_COLORS = {
     background: "#F0F2F4",
     text: "#4D5B6E",
   },
+  entity: {
+    border: "#F9C4D6",
+    background: "#FCDEE9",
+    text: "#822343",
+  },
 } satisfies Placeholders;
 
 type Props = {
   styled: (component: any) => any;
-  colors?: Placeholders;
+  colors?: Partial<Placeholders>;
   component?: any;
 };
 
@@ -41,9 +47,10 @@ type Props = {
  */
 export const generatePlaceholdersStyle = ({
   styled,
-  colors = DEFAULT_COLORS,
+  colors: colorsProp,
   component = "div",
 }: Props): StyledComponent<any> => {
+  const colors = { ...DEFAULT_COLORS, ...colorsProp };
   return styled(component)`
     white-space: pre-wrap;
     & .placeholder-widget {
@@ -90,6 +97,19 @@ export const generatePlaceholdersStyle = ({
       border: 1px solid ${colors.tag.border};
       background-color: ${colors.tag.background};
       color: ${colors.tag.text};
+    }
+
+    // entities render as the decoded glyph inline (not a pill), with a subtle
+    // tint so they stay readable mid-word while still being marked
+    & .placeholder-entity {
+      min-width: 0;
+      border: none;
+      border-radius: 3px;
+      padding: 0px 1px;
+      font-size: inherit;
+      vertical-align: baseline;
+      background-color: ${colors.entity.background};
+      color: ${colors.entity.text};
     }
 
     // in rtl mode, revert the placeholders direction

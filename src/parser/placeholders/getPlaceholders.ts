@@ -13,6 +13,7 @@ import {
 import type { SyntaxNode, Tree } from "@lezer/common";
 import { Placeholder } from "../types";
 import { TagInfoType, findTags } from "./findTags";
+import { findEntities } from "./findEntities";
 
 function getAllChildren(node: SyntaxNode) {
   const result: SyntaxNode[] = [];
@@ -175,17 +176,38 @@ export const getPlaceholders = (input: string, nested?: boolean) => {
 
       case Text:
       case TextNested: {
-        findTags(getNodeText(node)).forEach((tagInfo) => {
-          return addPlaceholder(
-            placeholderFromTag({
-              ...tagInfo,
-              position: {
-                start: tagInfo.position.start + node.from,
-                end: tagInfo.position.end + node.from,
-              },
-            })
-          );
+        const nodeText = getNodeText(node);
+        const tags = findTags(nodeText);
+        const shift = (position: { start: number; end: number }) => ({
+          start: position.start + node.from,
+          end: position.end + node.from,
         });
+
+        const nodePlaceholders: Placeholder[] = tags.map((tagInfo) =>
+          placeholderFromTag({ ...tagInfo, position: shift(tagInfo.position) })
+        );
+
+        findEntities(nodeText).forEach((entityInfo) => {
+          // skip entities living inside a tag (e.g. an attribute value)
+          const insideTag = tags.some(
+            (tag) =>
+              entityInfo.position.start < tag.position.end &&
+              entityInfo.position.end > tag.position.start
+          );
+          if (insideTag) {
+            return;
+          }
+          nodePlaceholders.push({
+            type: "entity",
+            name: entityInfo.decoded,
+            normalizedValue: entityInfo.raw,
+            position: shift(entityInfo.position),
+          });
+        });
+
+        nodePlaceholders
+          .sort((a, b) => a.position.start - b.position.start)
+          .forEach(addPlaceholder);
 
         enter = false;
         break;
