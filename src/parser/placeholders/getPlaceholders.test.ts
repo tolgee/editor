@@ -122,4 +122,15 @@ describe("get placeholders", () => {
     const placeholders = getPlaceholders('<a href="x&amp;y">z</a>');
     expect(placeholders!.map((p) => p.type)).toEqual(["tagOpen", "tagClose"]);
   });
+
+  it("doesn't surface an invalid expression as a placeholder", () => {
+    expect(getPlaceholders("before {placeholder:space} after")).toEqual([]);
+  });
+
+  it("still parses a valid placeholder next to text", () => {
+    const placeholders = getPlaceholders("before {placeholder} after");
+    expect(placeholders!.map((p) => p.normalizedValue)).toEqual([
+      "{placeholder}",
+    ]);
+  });
 });
