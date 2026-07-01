@@ -30,6 +30,13 @@ function expectToThrow(text = getText()) {
   expect(() => tolgee(text)).toThrow();
 }
 
+// Invalid ICU the tolgee parser still accepts leniently (kept as one Expression
+// node so RTL rendering isn't split); validity is reported by the linter.
+function expectIcuOnlyThrows(text = getText()) {
+  expect(() => icu(text)).toThrow();
+  expect(() => tolgee(text)).not.toThrow();
+}
+
 describe("simple formatter", () => {
   test("simple test", () => {
     matchIcu();
@@ -96,7 +103,7 @@ describe("simple formatter", () => {
   });
 
   test("this is obviously bad { yo yo }", () => {
-    expectToThrowWithIcu();
+    expectIcuOnlyThrows();
   });
 
   test("this is obviously bad { yo, }", () => {
@@ -148,5 +155,28 @@ describe("simple formatter", () => {
     matchIcu(
       "Auto translated {test, plural, =1 {# translation} other {# translations}}"
     );
+  });
+
+  test("Leniently accepts invalid param contents {placeholder:space}", () => {
+    expectIcuOnlyThrows("{placeholder:space}");
+  });
+
+  test("Lenient invalid expression is a single Expression node", () => {
+    const tree = parser.parse(
+      "some rtl text {placeholder:space} more rtl text"
+    );
+    const expressions: [number, number][] = [];
+    tree.iterate({
+      enter(node) {
+        if (node.name === "Expression") {
+          expressions.push([node.from, node.to]);
+        }
+      },
+    });
+    expect(expressions).toEqual([[14, 33]]);
+  });
+
+  test("Lenient acceptance doesn't swallow following select variants", () => {
+    matchIcu("{name, plural, one {# one} other {# other}}");
   });
 });

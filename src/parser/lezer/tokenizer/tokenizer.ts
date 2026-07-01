@@ -1,6 +1,12 @@
-import { Text, TextNested } from "../tolgeeParser.terms";
+import {
+  InvalidExpressionContent,
+  Text,
+  TextNested,
+} from "../tolgeeParser.terms";
 import { ExternalTokenizer, InputStream } from "@lezer/lr";
 import { matchText } from "./matchText";
+import { fromCodePoint } from "@codemirror/state";
+import { isWhiteSpace } from "../helpers";
 
 function getEscapable(isNested: boolean) {
   const result = new Set(["{", "}"]);
@@ -48,3 +54,33 @@ export const textNested = new ExternalTokenizer((input) => {
     textToken: TextNested,
   });
 });
+
+// Body of a `{...}` that isn't valid ICU (e.g. `placeholder:space`), kept as one
+// token so the whole `{...}` stays a single Expression node (else RTL bidi
+// isolation splits it). Never starts on whitespace/comma/brace and stops at a
+// comma, so on valid input it can't out-span `Param`; `extend: true` + the
+// negative dynamicPrecedence on InvalidExpressionBody then let the real parse win.
+export const invalidExpression = new ExternalTokenizer(
+  (input) => {
+    const first = input.next;
+    if (first === -1 || isWhiteSpace(first)) {
+      return;
+    }
+    const firstChar = fromCodePoint(first);
+    if (firstChar === "{" || firstChar === "}" || firstChar === ",") {
+      return;
+    }
+    const startPosition = input.pos;
+    while (input.next !== -1) {
+      const char = fromCodePoint(input.next);
+      if (char === "{" || char === "}" || char === ",") {
+        break;
+      }
+      input.advance();
+    }
+    if (startPosition < input.pos) {
+      input.acceptToken(InvalidExpressionContent);
+    }
+  },
+  { extend: true }
+);
