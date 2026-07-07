@@ -39,6 +39,19 @@ describe("getInvalidPlaceholders", () => {
     ).toEqual(["{bad:one}"]);
   });
 
+  it("captures a comma-containing invalid body as one", () => {
+    expect(
+      getInvalidPlaceholders("x {placeholder:space, foo} y")!.map((p) => p.value)
+    ).toEqual(["{placeholder:space, foo}"]);
+  });
+
+  it("captures an invalid body starting with a bidi mark as one", () => {
+    const rlm = "‏";
+    expect(
+      getInvalidPlaceholders(`x {${rlm}placeholder:space} y`)!.map((p) => p.value)
+    ).toEqual([`{${rlm}placeholder:space}`]);
+  });
+
   it("returns null when the text can't be parsed", () => {
     expect(getInvalidPlaceholders("unclosed {")).toBeNull();
   });

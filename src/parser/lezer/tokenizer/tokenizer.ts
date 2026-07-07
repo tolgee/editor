@@ -6,7 +6,6 @@ import {
 import { ExternalTokenizer, InputStream } from "@lezer/lr";
 import { matchText } from "./matchText";
 import { fromCodePoint } from "@codemirror/state";
-import { isWhiteSpace } from "../helpers";
 
 function getEscapable(isNested: boolean) {
   const result = new Set(["{", "}"]);
@@ -55,25 +54,18 @@ export const textNested = new ExternalTokenizer((input) => {
   });
 });
 
-// Body of a `{...}` that isn't valid ICU (e.g. `placeholder:space`), kept as one
-// token so the whole `{...}` stays a single Expression node (else RTL bidi
-// isolation splits it). Never starts on whitespace/comma/brace and stops at a
-// comma, so on valid input it can't out-span `Param`; `extend: true` + the
-// negative dynamicPrecedence on InvalidExpressionBody then let the real parse win.
+// Everything inside a `{...}` up to the closing brace, used when the contents
+// aren't a valid ICU expression (e.g. `placeholder:space`). Kept as one token so
+// the whole `{...}` stays a single Expression node — else RTL bidi isolation
+// splits it. `extend: true` lets it coexist with the real `Param`/`space` tokens
+// so both parses are explored; InvalidExpressionBody's negative dynamicPrecedence
+// then makes a valid format/select parse win whenever one exists.
 export const invalidExpression = new ExternalTokenizer(
   (input) => {
-    const first = input.next;
-    if (first === -1 || isWhiteSpace(first)) {
-      return;
-    }
-    const firstChar = fromCodePoint(first);
-    if (firstChar === "{" || firstChar === "}" || firstChar === ",") {
-      return;
-    }
     const startPosition = input.pos;
     while (input.next !== -1) {
       const char = fromCodePoint(input.next);
-      if (char === "{" || char === "}" || char === ",") {
+      if (char === "{" || char === "}") {
         break;
       }
       input.advance();
