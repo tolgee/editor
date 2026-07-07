@@ -11,9 +11,6 @@ export type InvalidPlaceholder = {
   value: string;
 };
 
-// The `{...}` expressions that look like a placeholder but aren't valid ICU
-// (e.g. `{placeholder:space}`). Null when the text can't be parsed, like
-// getPlaceholders.
 export const getInvalidPlaceholders = (
   input: string,
   nested?: boolean

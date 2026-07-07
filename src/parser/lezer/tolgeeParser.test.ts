@@ -91,11 +91,11 @@ describe("simple formatter", () => {
   });
 
   test("this also { } wrong", () => {
-    expectToThrowWithIcu();
+    expectIcuOnlyThrows();
   });
 
   test("this plain { , } wrong", () => {
-    expectToThrowWithIcu();
+    expectIcuOnlyThrows();
   });
 
   test("this is { unexpected", () => {
@@ -107,11 +107,11 @@ describe("simple formatter", () => {
   });
 
   test("this is obviously bad { yo, }", () => {
-    expectToThrowWithIcu();
+    expectIcuOnlyThrows();
   });
 
   test(`test {', number, ::percent} in param name`, () => {
-    expectToThrowWithIcu();
+    expectIcuOnlyThrows();
   });
 
   // plurals

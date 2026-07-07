@@ -6,11 +6,10 @@ contentNested { (TextNested | Expression | PluralPlaceholder ) contentNested? }
 
 Expression { ExpressionOpen (FormatExpression | SelectExpression | InvalidExpressionBody) ExpressionClose }
 
-// A `{...}` that isn't a valid format/select expression (e.g. `{placeholder:space}`).
-// No `Param` child, so it's not highlighted or shown as a chip; kept as one
-// Expression node so RTL bidi isolation can't split it. dynamicPrecedence=-1 lets
-// a real format/select parse win whenever one exists.
-InvalidExpressionBody[@dynamicPrecedence=-1] { space? InvalidExpressionContent }
+// dynamicPrecedence=-1 makes a real format/select parse win whenever one exists;
+// this is only reached for `{...}` that can't parse otherwise. See the
+// `invalidExpression` tokenizer for the full rationale.
+InvalidExpressionBody[@dynamicPrecedence=-1] { InvalidExpressionContent }
 
 FormatExpression { space? Param space? (sep space? FormatFunction space? (sep (space? FormatStyle)+ space?)?)? }
 SelectExpression { space? Param space? sep space? SelectFunction space? sep (space? Offset)? (space? SelectVariant)+ space? }
