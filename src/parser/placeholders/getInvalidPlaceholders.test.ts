@@ -9,6 +9,10 @@ describe("getInvalidPlaceholders", () => {
     expect(getInvalidPlaceholders("Hello {name}")).toEqual([]);
   });
 
+  it("returns nothing for numeric params", () => {
+    expect(getInvalidPlaceholders("Hello {0} and {1, number}")).toEqual([]);
+  });
+
   it("returns nothing for a valid plural", () => {
     expect(
       getInvalidPlaceholders("{count, plural, one {# item} other {# items}}")
