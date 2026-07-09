@@ -103,6 +103,7 @@
   },
   "//dependencies": "entities pinned to 6.x — latest dual CJS/ESM release; 7+ are ESM-only and break the CommonJS jest tests and the .cjs build",
   "dependencies": {
+    "bidi-js": "^1.0.3",
     "entities": "^6.0.1"
   }
 }

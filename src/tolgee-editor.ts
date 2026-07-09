@@ -1,6 +1,5 @@
 export { getPlaceholders } from "./parser/placeholders/getPlaceholders";
 export { getInvalidPlaceholders } from "./parser/placeholders/getInvalidPlaceholders";
-export type { InvalidPlaceholder } from "./parser/placeholders/getInvalidPlaceholders";
 export { PlaceholderPlugin } from "./parser/PlaceholderPlugin";
 export { parser as tolgeeParser } from "./parser/lezer/tolgeeParser";
 export { tolgeeSyntax } from "./parser/tolgeeSyntax";

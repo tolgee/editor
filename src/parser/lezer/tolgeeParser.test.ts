@@ -30,8 +30,6 @@ function expectToThrow(text = getText()) {
   expect(() => tolgee(text)).toThrow();
 }
 
-// Invalid ICU the tolgee parser still accepts leniently (kept as one Expression
-// node so RTL rendering isn't split); validity is reported by the linter.
 function expectIcuOnlyThrows(text = getText()) {
   expect(() => icu(text)).toThrow();
   expect(() => tolgee(text)).not.toThrow();

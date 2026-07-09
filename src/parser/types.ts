@@ -11,6 +11,11 @@ export type Placeholder = {
   normalizedValue: string;
 };
 
+export type InvalidPlaceholder = {
+  position: Position;
+  value: string;
+};
+
 export type TolgeeFormat = {
   parameter?: string;
   variants: Partial<Record<Intl.LDMLPluralRule, string | undefined>>;
