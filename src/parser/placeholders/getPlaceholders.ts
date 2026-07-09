@@ -1,4 +1,3 @@
-import { parser } from "../lezer/tolgeeParser";
 import {
   Expression,
   FormatExpression,
@@ -14,6 +13,7 @@ import type { SyntaxNode, Tree } from "@lezer/common";
 import { Placeholder } from "../types";
 import { TagInfoType, findTags } from "./findTags";
 import { findEntities } from "./findEntities";
+import { parseTolgee } from "./parseTolgee";
 
 function getAllChildren(node: SyntaxNode) {
   const result: SyntaxNode[] = [];
@@ -29,12 +29,7 @@ function getAllChildren(node: SyntaxNode) {
 export const getPlaceholders = (input: string, nested?: boolean) => {
   let tree: Tree;
   try {
-    tree = parser
-      .configure({
-        strict: true,
-        top: nested ? "Nested" : "Root",
-      })
-      .parse(input);
+    tree = parseTolgee(input, nested, true);
   } catch (e) {
     return null;
   }

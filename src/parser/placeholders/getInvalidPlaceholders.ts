@@ -1,46 +1,35 @@
-import { parser } from "../lezer/tolgeeParser";
 import {
   Expression,
+  ExpressionClose,
   InvalidExpressionBody,
 } from "../lezer/tolgeeParser.terms";
-import type { Tree } from "@lezer/common";
-import { Position } from "../types";
-
-export type InvalidPlaceholder = {
-  position: Position;
-  value: string;
-};
+import { InvalidPlaceholder } from "../types";
+import { parseTolgee } from "./parseTolgee";
 
 export const getInvalidPlaceholders = (
   input: string,
   nested?: boolean
-): InvalidPlaceholder[] | null => {
-  let tree: Tree;
-  try {
-    tree = parser
-      .configure({
-        strict: true,
-        top: nested ? "Nested" : "Root",
-      })
-      .parse(input);
-  } catch (e) {
-    return null;
-  }
+): InvalidPlaceholder[] => {
+  // non-strict parse: unrelated syntax errors elsewhere in the string
+  // (`{}`, an unclosed `{`) must not suppress the warnings
+  const tree = parseTolgee(input, nested, false);
 
   const result: InvalidPlaceholder[] = [];
-  const cursor = tree.cursor();
-  do {
-    const node = cursor.node;
-    if (node.type.id === Expression) {
-      const inner = node.firstChild?.nextSibling;
-      if (inner?.type.id === InvalidExpressionBody) {
+  tree.iterate({
+    enter(node) {
+      if (node.type.id !== Expression) {
+        return;
+      }
+      const body = node.node.firstChild?.nextSibling;
+      const closed = node.node.lastChild?.type.id === ExpressionClose;
+      if (body?.type.id === InvalidExpressionBody && closed) {
         result.push({
           position: { start: node.from, end: node.to },
           value: input.substring(node.from, node.to),
         });
       }
-    }
-  } while (cursor.next());
+    },
+  });
 
   return result;
 };

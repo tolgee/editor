@@ -29,30 +29,48 @@ describe("getInvalidPlaceholders", () => {
 
   it("detects multiple invalid placeholders", () => {
     expect(
-      getInvalidPlaceholders("{a:b} and {c.d}")!.map((p) => p.value)
+      getInvalidPlaceholders("{a:b} and {c.d}").map((p) => p.value)
     ).toEqual(["{a:b}", "{c.d}"]);
   });
 
   it("keeps valid placeholders out of the result", () => {
     expect(
-      getInvalidPlaceholders("{name} and {bad:one}")!.map((p) => p.value)
+      getInvalidPlaceholders("{name} and {bad:one}").map((p) => p.value)
     ).toEqual(["{bad:one}"]);
   });
 
   it("captures a comma-containing invalid body as one", () => {
     expect(
-      getInvalidPlaceholders("x {placeholder:space, foo} y")!.map((p) => p.value)
+      getInvalidPlaceholders("x {placeholder:space, foo} y").map((p) => p.value)
     ).toEqual(["{placeholder:space, foo}"]);
   });
 
   it("captures an invalid body starting with a bidi mark as one", () => {
     const rlm = "‏";
     expect(
-      getInvalidPlaceholders(`x {${rlm}placeholder:space} y`)!.map((p) => p.value)
+      getInvalidPlaceholders(`x {${rlm}placeholder:space} y`).map((p) => p.value)
     ).toEqual([`{${rlm}placeholder:space}`]);
   });
 
-  it("returns null when the text can't be parsed", () => {
-    expect(getInvalidPlaceholders("unclosed {")).toBeNull();
+  it("still reports invalid placeholders when the string has other errors", () => {
+    expect(getInvalidPlaceholders("{good:bad} {}").map((p) => p.value)).toEqual(
+      ["{good:bad}"]
+    );
+    expect(
+      getInvalidPlaceholders("{good:bad} more {unclosed").map((p) => p.value)
+    ).toEqual(["{good:bad}"]);
+  });
+
+  it("detects an invalid placeholder nested in a plural variant", () => {
+    expect(
+      getInvalidPlaceholders(
+        "{count, plural, one {# {bad:x}} other {# items}}"
+      ).map((p) => p.value)
+    ).toEqual(["{bad:x}"]);
+  });
+
+  it("ignores an unclosed expression", () => {
+    expect(getInvalidPlaceholders("unclosed {")).toEqual([]);
+    expect(getInvalidPlaceholders("unclosed {abc")).toEqual([]);
   });
 });
