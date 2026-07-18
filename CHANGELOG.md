@@ -1,3 +1,16 @@
+# [1.19.0](https://github.com/tolgee/editor/compare/v1.18.0...v1.19.0) (2026-07-18)
+
+
+### Bug Fixes
+
+* capture all invalid placeholder bodies and infer their bidi ([a84a4ac](https://github.com/tolgee/editor/commit/a84a4acba70fc7aa3c97d6e6f64632ada0a58f86))
+* use bidi-js for direction detection and make invalid placeholder scan error-tolerant ([77ae9f0](https://github.com/tolgee/editor/commit/77ae9f0eac5380852de1eb5c528f8d51d1c9e7b9)), closes [UAX#9](https://github.com/UAX/issues/9)
+
+
+### Features
+
+* render invalid ICU placeholders as plain text ([2cedc83](https://github.com/tolgee/editor/commit/2cedc83d4bb1d674a9089c8406e22885b6f86105))
+
 # [1.18.0](https://github.com/tolgee/editor/compare/v1.17.0...v1.18.0) (2026-06-30)
 
 
