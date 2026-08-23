@@ -20,3 +20,17 @@ export {
   PO_MSGCTXT_KEY_SEPARATOR,
 } from "./parser/KeyNamePlugin";
 export { generateKeyNameStyle } from "./parser/keyNameStyle";
+export {
+  InvisibleCharactersPlugin,
+  invisibleCharactersTooltip,
+} from "./parser/InvisibleCharactersPlugin";
+export {
+  findInvisibleCharacters,
+  INVISIBLE_CHARACTERS,
+} from "./parser/invisibleCharacters/findInvisibleCharacters";
+export type {
+  InvisibleChar,
+  InvisibleCharKind,
+  FoundInvisibleChar,
+} from "./parser/invisibleCharacters/findInvisibleCharacters";
+export { generateInvisibleCharactersStyle } from "./parser/invisibleCharactersStyle";
