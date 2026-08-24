@@ -14,11 +14,7 @@ import {
 } from "./invisibleCharacters/findInvisibleCharacters";
 
 const nonBreakingSpaceDecoration = Decoration.mark({
-  attributes: {
-    class: "cm-invisible-char-nbsp",
-    "data-cy": "invisible-character-editor",
-    "data-cy-kind": "nonBreakingSpace",
-  },
+  attributes: { class: "cm-invisible-char-nbsp" },
 });
 
 class ZeroWidthWidget extends WidgetType {
@@ -29,13 +25,6 @@ class ZeroWidthWidget extends WidgetType {
   toDOM(): HTMLElement {
     const bar = document.createElement("span");
     bar.className = "cm-invisible-char-zero-width";
-    // Attributes must come from an object literal: the consuming app's
-    // `generate-data-cy` scan looks for `'data-cy': '<literal>'` and misses
-    // `setAttribute` with a variable.
-    Object.entries({
-      "data-cy": "invisible-character-editor",
-      "data-cy-kind": "zeroWidth",
-    }).forEach(([name, value]) => bar.setAttribute(name, value));
     return bar;
   }
 }
@@ -104,9 +93,7 @@ export const invisibleCharactersTooltip = (
       above: true,
       create: () => {
         const dom = document.createElement("div");
-        Object.entries({ "data-cy": "invisible-character-tooltip" }).forEach(
-          ([name, value]) => dom.setAttribute(name, value)
-        );
+        dom.className = "cm-invisible-char-tooltip";
         dom.textContent = getLabel(found.char);
         return { dom };
       },
