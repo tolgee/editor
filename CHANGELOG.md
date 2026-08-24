@@ -1,3 +1,10 @@
+# [1.20.0](https://github.com/tolgee/editor/compare/v1.19.0...v1.20.0) (2026-08-24)
+
+
+### Features
+
+* add invisible characters detection, plugin and style ([9506b5e](https://github.com/tolgee/editor/commit/9506b5e4b9adcf85c0ee6f056297ee8ca2a1d987))
+
 # [1.19.0](https://github.com/tolgee/editor/compare/v1.18.0...v1.19.0) (2026-07-18)
 
 
